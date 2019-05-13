@@ -8,7 +8,7 @@
               android:name="com.frankegan.symbiotic.ui.home.HomeFragment"
               android:label="home_fragment"
               tools:layout="@layout/home_fragment">
-        <action android:id="@+id/action_home_dest_to_details_dest"
+        <action android:id="@+id/add_edit_action"
                 app:destination="@id/details_dest"/>
     </fragment>
 
@@ -26,7 +26,7 @@
 
     <fragment android:id="@+id/details_dest"
               android:name="com.frankegan.symbiotic.ui.addedit.DetailsFragment"
-              android:label="details_fragment"
+              android:label="Details"
               tools:layout="@layout/details_fragment">
 
         <action android:id="@+id/action_detailsFragment_to_ingredientsFragment"
@@ -34,7 +34,7 @@
     </fragment>
 
     <fragment android:id="@+id/ingredients_dest"
-              android:name="com.frankegan.symbiotic.ui.addedit.IngredientsFragment" android:label="ingredients_fragment"
+              android:name="com.frankegan.symbiotic.ui.addedit.IngredientsFragment" android:label="Ingredients"
               tools:layout="@layout/ingredients_fragment">
 
         <action android:id="@+id/action_ingredientsFragment_to_galleryFragment"
@@ -43,7 +43,7 @@
 
     <fragment android:id="@+id/gallery_dest"
               android:name="com.frankegan.symbiotic.ui.addedit.GalleryFragment"
-              android:label="gallery_fragment"
+              android:label="Gallery"
               tools:layout="@layout/gallery_fragment"/>
 
     <fragment android:id="@+id/settingsFragment"

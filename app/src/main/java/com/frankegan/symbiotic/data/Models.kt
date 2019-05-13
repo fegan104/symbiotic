@@ -5,10 +5,11 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import org.threeten.bp.LocalDateTime
+import java.util.*
 
 @Entity
 data class Fermentation(
-    @PrimaryKey val id: String,
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val title: String,
     @TypeConverters
     val startDate: LocalDateTime,
