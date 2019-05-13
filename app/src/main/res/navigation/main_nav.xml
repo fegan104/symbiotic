@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main_nav"
+            app:startDestination="@id/home_dest">
+
+    <fragment android:id="@+id/home_dest"
+              android:name="com.frankegan.symbiotic.ui.home.HomeFragment"
+              android:label="home_fragment"
+              tools:layout="@layout/home_fragment">
+        <action android:id="@+id/action_home_dest_to_details_dest"
+                app:destination="@id/details_dest"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/chart_dest"
+            android:name="com.frankegan.symbiotic.ui.chart.ChartFragment"
+            android:label="chart_fragment"
+            tools:layout="@layout/chart_fragment"/>
+
+    <fragment
+            android:id="@+id/discover_dest"
+            android:name="com.frankegan.symbiotic.ui.discover.DiscoverFragment"
+            android:label="discover_fragment"
+            tools:layout="@layout/discover_fragment"/>
+
+    <fragment android:id="@+id/details_dest"
+              android:name="com.frankegan.symbiotic.ui.addedit.DetailsFragment"
+              android:label="details_fragment"
+              tools:layout="@layout/details_fragment">
+
+        <action android:id="@+id/action_detailsFragment_to_ingredientsFragment"
+                app:destination="@id/ingredients_dest"/>
+    </fragment>
+
+    <fragment android:id="@+id/ingredients_dest"
+              android:name="com.frankegan.symbiotic.ui.addedit.IngredientsFragment" android:label="ingredients_fragment"
+              tools:layout="@layout/ingredients_fragment">
+
+        <action android:id="@+id/action_ingredientsFragment_to_galleryFragment"
+                app:destination="@id/gallery_dest"/>
+    </fragment>
+
+    <fragment android:id="@+id/gallery_dest"
+              android:name="com.frankegan.symbiotic.ui.addedit.GalleryFragment"
+              android:label="gallery_fragment"
+              tools:layout="@layout/gallery_fragment"/>
+
+    <fragment android:id="@+id/settingsFragment"
+              android:name="com.frankegan.symbiotic.ui.settings.SettingsFragment"
+              android:label="settings_fragment"
+              tools:layout="@layout/settings_fragment"/>
+</navigation>

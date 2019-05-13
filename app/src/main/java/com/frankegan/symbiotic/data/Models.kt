@@ -1,46 +1,65 @@
 package com.frankegan.symbiotic.data
 
-import org.threeten.bp.LocalDate
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import org.threeten.bp.LocalDateTime
 
+@Entity
 data class Fermentation(
-    val id: Long,
+    @PrimaryKey val id: String,
     val title: String,
-    val startDate: LocalDate,
-    val firstEndDate: LocalDate,
-    val secondEndDate: LocalDate
+    @TypeConverters
+    val startDate: LocalDateTime,
+    @TypeConverters
+    val firstEndDate: LocalDateTime,
+    @TypeConverters
+    val secondEndDate: LocalDateTime
 )
 
+@Entity
 data class Image(
-    val path: String,
+    @PrimaryKey val filename: String,
     val caption: String,
-    val fermentation: Long
+    @ForeignKey(
+        entity = Fermentation::class,
+        parentColumns = ["id"],
+        childColumns = ["fermentation"]
+    ) val fermentation: String
 )
 
+@Entity
 data class Ingredient(
+    @PrimaryKey val id: String,
     val name: String,
-    val unit: Unit,
     val quantity: Double,
-    val fermentation: Long
+    val unit: String,
+    @ForeignKey(
+        entity = Fermentation::class,
+        parentColumns = ["id"],
+        childColumns = ["fermentation"]
+    ) val fermentation: String
 )
 
+@Entity
 data class Note(
+    @PrimaryKey val id: String,
     val content: String,
-    val fermentation: Long
+    @ForeignKey(
+        entity = Fermentation::class,
+        parentColumns = ["id"],
+        childColumns = ["fermentation"]
+    ) val fermentation: String
 )
 
-sealed class Unit {
-    enum class Volume(val label: String) {
-        OUNCE("oz"),
-        CUP("cup"),
-        GALLON("gal"),
-        TEABAG("tbag"),
-        TBSP("tbsp")
-    }
+sealed class Result<out T : Any> {
 
-    enum class Mass(val label: String) {
-        KG("kg"),
-        GRAM("gram"),
-        OUNCE("oz"),
-        LBS("lbs")
-    }
+    class Success<out T : Any>(val data: T) : Result<T>()
+
+    class Error(val exception: Throwable) : Result<Nothing>()
 }
+
+open class DataSourceException(message: String? = null) : Exception(message)
+
+class LocalDataNotFoundException : DataSourceException("Data not found in local data source")
