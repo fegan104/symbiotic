@@ -91,7 +91,7 @@
             android:inputType="textMultiLine"
             android:singleLine="false"
             app:startIconDrawable="@drawable/ic_short_text_black_24dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
