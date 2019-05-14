@@ -8,8 +8,7 @@
               android:name="com.frankegan.symbiotic.ui.home.HomeFragment"
               android:label="home_fragment"
               tools:layout="@layout/home_fragment">
-        <action android:id="@+id/add_edit_action"
-                app:destination="@id/details_dest"/>
+        <action android:id="@+id/add_edit_action" app:destination="@id/addEditFragment"/>
     </fragment>
 
     <fragment
@@ -50,4 +49,6 @@
               android:name="com.frankegan.symbiotic.ui.settings.SettingsFragment"
               android:label="settings_fragment"
               tools:layout="@layout/settings_fragment"/>
+    <fragment android:id="@+id/addEditFragment" android:name="com.frankegan.symbiotic.ui.addedit.AddEditFragment"
+              android:label="add_edit_fragment" tools:layout="@layout/add_edit_fragment"/>
 </navigation>

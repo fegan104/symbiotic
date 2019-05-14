@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import com.frankegan.symbiotic.R
 
 /**
- * A simple [Fragment] subclass.
- *
  * This holds the list of ingredients in our kombucha.
  */
 class IngredientsFragment : Fragment() {
@@ -28,6 +26,6 @@ class IngredientsFragment : Fragment() {
          * this fragment using the provided parameters.
          */
         @JvmStatic
-        fun newInstance(param1: String, param2: String) = IngredientsFragment()
+        fun newInstance() = IngredientsFragment()
     }
 }
