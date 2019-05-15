@@ -6,6 +6,10 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 28
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.frankegan.symbiotic"
         minSdkVersion 21
@@ -50,6 +54,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.1.0-alpha03"
     //Third Party
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.0'
     //Testing
     testImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'

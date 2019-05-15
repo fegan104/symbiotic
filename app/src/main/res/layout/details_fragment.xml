@@ -23,7 +23,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -31,7 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Fermentation Start Date"
-            android:id="@+id/start_date_input" android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:id="@+id/start_date_layout" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/name_input" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
@@ -40,8 +43,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/start_date_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textNoSuggestions|none"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,16 +56,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Fermentation End Date"
-            android:id="@+id/f1_date_input" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/start_date_input" android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:id="@+id/f1_date_layout" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/start_date_layout" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
             app:startIconDrawable="@drawable/ic_today_black_24dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/f1_date_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textNoSuggestions|none"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,16 +79,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Second Fermentation End Date"
-            android:id="@+id/f2_date_input" android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:id="@+id/f2_date_layout" android:layout_marginTop="8dp"
             app:startIconDrawable="@drawable/ic_today_black_24dp"
-            app:layout_constraintTop_toBottomOf="@+id/f1_date_input" android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/f1_date_layout" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/f2_date_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textNoSuggestions|none"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,15 +102,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/notes_input"
-            app:layout_constraintTop_toBottomOf="@+id/f2_date_input" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/f2_date_layout"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             android:hint="Notes"
             android:inputType="textMultiLine"
             android:singleLine="false"
             app:startIconDrawable="@drawable/ic_short_text_black_24dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_marginTop="8dp">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

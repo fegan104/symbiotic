@@ -32,7 +32,7 @@ data class Image(
 
 @Entity
 data class Ingredient(
-    @PrimaryKey val id: String,
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val name: String,
     val quantity: Double,
     val unit: String,

@@ -11,5 +11,5 @@
 
     <item android:id="@id/chart_dest"
           android:icon="@drawable/ic_timeline_black_24dp"
-          android:title="Charts"/>
+          android:title="Stats"/>
 </menu>

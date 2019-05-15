@@ -6,49 +6,41 @@
 
     <fragment android:id="@+id/home_dest"
               android:name="com.frankegan.symbiotic.ui.home.HomeFragment"
-              android:label="home_fragment"
+              android:label="Fermentations"
               tools:layout="@layout/home_fragment">
-        <action android:id="@+id/add_edit_action" app:destination="@id/addEditFragment"/>
+        <action android:id="@+id/add_edit_action" app:destination="@id/add_edit_fragment"/>
     </fragment>
 
     <fragment
             android:id="@+id/chart_dest"
             android:name="com.frankegan.symbiotic.ui.chart.ChartFragment"
-            android:label="chart_fragment"
+            android:label="Stats"
             tools:layout="@layout/chart_fragment"/>
 
     <fragment
             android:id="@+id/discover_dest"
             android:name="com.frankegan.symbiotic.ui.discover.DiscoverFragment"
-            android:label="discover_fragment"
+            android:label="Discover"
             tools:layout="@layout/discover_fragment"/>
 
     <fragment android:id="@+id/details_dest"
               android:name="com.frankegan.symbiotic.ui.addedit.DetailsFragment"
               android:label="Details"
-              tools:layout="@layout/details_fragment">
-
-        <action android:id="@+id/action_detailsFragment_to_ingredientsFragment"
-                app:destination="@id/ingredients_dest"/>
-    </fragment>
+              tools:layout="@layout/details_fragment"/>
 
     <fragment android:id="@+id/ingredients_dest"
               android:name="com.frankegan.symbiotic.ui.addedit.IngredientsFragment" android:label="Ingredients"
-              tools:layout="@layout/ingredients_fragment">
-
-        <action android:id="@+id/action_ingredientsFragment_to_galleryFragment"
-                app:destination="@id/gallery_dest"/>
-    </fragment>
+              tools:layout="@layout/ingredients_fragment"/>
 
     <fragment android:id="@+id/gallery_dest"
               android:name="com.frankegan.symbiotic.ui.addedit.GalleryFragment"
               android:label="Gallery"
               tools:layout="@layout/gallery_fragment"/>
 
-    <fragment android:id="@+id/settingsFragment"
+    <fragment android:id="@+id/settings_dest"
               android:name="com.frankegan.symbiotic.ui.settings.SettingsFragment"
-              android:label="settings_fragment"
+              android:label="Settings"
               tools:layout="@layout/settings_fragment"/>
-    <fragment android:id="@+id/addEditFragment" android:name="com.frankegan.symbiotic.ui.addedit.AddEditFragment"
-              android:label="add_edit_fragment" tools:layout="@layout/add_edit_fragment"/>
+    <fragment android:id="@+id/add_edit_fragment" android:name="com.frankegan.symbiotic.ui.addedit.AddEditFragment"
+              tools:layout="@layout/add_edit_fragment" android:label="Details"/>
 </navigation>

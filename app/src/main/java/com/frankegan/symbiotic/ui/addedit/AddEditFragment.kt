@@ -1,6 +1,7 @@
 package com.frankegan.symbiotic.ui.addedit
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,8 @@ import kotlinx.android.synthetic.main.add_edit_fragment.*
 class AddEditFragment : Fragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -41,5 +43,6 @@ class AddEditFragment : Fragment() {
                 override fun getPageTitle(position: Int) = titles[position]
             }
         tab_layout.setupWithViewPager(view_pager)
+        tab_layout.setTabTextColors(Color.parseColor("#80ffffff"), Color.parseColor("white"))
     }
 }
