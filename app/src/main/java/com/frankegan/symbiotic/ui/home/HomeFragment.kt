@@ -24,7 +24,9 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        fab.setOnClickListener { findNavController().navigate(HomeFragmentDirections.addEditAction()) }
+        fab.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = null))
+        }
         recycler_view.adapter = FermentationAdapter().apply {
             updateItems(
                 listOf(

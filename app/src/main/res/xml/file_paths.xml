@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--/storage/emulated/0/Android/data/com.frankegan.symbiotic/files/Pictures/Symbiotic/JPEG_20190517_174326_2330723899032408559.jpg-->
+    <!--<external-path name="Symbiotic" path="Android/data/com.frankegan.symbiotic/files/Pictures" />-->
+    <external-path name="Symbiotic" path="Pictures"/>
+</paths>

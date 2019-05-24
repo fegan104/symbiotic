@@ -3,12 +3,16 @@ package com.frankegan.symbiotic.ui.addedit
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import com.frankegan.symbiotic.R
+import com.frankegan.symbiotic.di.injector
 import kotlinx.android.synthetic.main.add_edit_fragment.*
 
 /**
@@ -16,6 +20,9 @@ import kotlinx.android.synthetic.main.add_edit_fragment.*
  *
  */
 class AddEditFragment : Fragment() {
+
+    private val factory by lazy { injector.addEditViewModelFactory() }
+    private val viewModel by viewModels<AddEditViewModel>(factoryProducer = { factory })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,8 +34,13 @@ class AddEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val titles = listOf("Details", "Ingredients", "Gallery")
+        val fermentationId = AddEditFragmentArgs.fromBundle(arguments!!).fermentationId
 
+        viewModel.loadFermentationData(fermentationId)
+        viewModel.fermentationLiveData.observe(this) {
+            Log.d("AddEditFragment", "observing change $it")
+        }
+        val titles = listOf("Details", "Ingredients", "Gallery")
         view_pager.adapter =
             object : FragmentPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
                 override fun getItem(position: Int) = when (position) {
