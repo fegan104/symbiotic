@@ -42,5 +42,7 @@
               android:label="Settings"
               tools:layout="@layout/settings_fragment"/>
     <fragment android:id="@+id/add_edit_fragment" android:name="com.frankegan.symbiotic.ui.addedit.AddEditFragment"
-              tools:layout="@layout/add_edit_fragment" android:label="Details"/>
+              tools:layout="@layout/add_edit_fragment" android:label="Details">
+        <argument android:name="fermentationId" app:argType="string" app:nullable="true"/>
+    </fragment>
 </navigation>

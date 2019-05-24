@@ -1,14 +1,10 @@
 package com.frankegan.symbiotic
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -17,10 +13,6 @@ import org.threeten.bp.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-
-fun <T> LiveData<T>.observe(owner: LifecycleOwner, observer: (T) -> Unit) {
-    this.observe(owner, Observer { it?.let(observer) })
-}
 
 /**
  * Equivalent to [launch] but return [Unit] instead of [Job].
@@ -41,7 +33,7 @@ fun CoroutineScope.launchSilent(
     this.launch(context, start, block)
 }
 
-inline fun LocalDateTime.format(format: String) = this.format(DateTimeFormatter.ofPattern(format))
+fun LocalDateTime.format(format: String) = this.format(DateTimeFormatter.ofPattern(format))
 
 inline fun Fragment.openTimePicker(
     hourOfDay: Int = LocalTime.now().hour,

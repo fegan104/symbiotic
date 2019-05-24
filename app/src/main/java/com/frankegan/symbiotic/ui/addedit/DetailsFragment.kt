@@ -1,18 +1,20 @@
 package com.frankegan.symbiotic.ui.addedit
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import com.frankegan.symbiotic.R
+import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
 import com.frankegan.symbiotic.launchSilent
 import com.frankegan.symbiotic.openDateTimeDialog
 import kotlinx.android.synthetic.main.details_fragment.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 
 const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
@@ -23,14 +25,11 @@ const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
  * This contains the fermentations name, date and time for notifications and extra notes about the fermentation.
  */
 class DetailsFragment : Fragment() {
-    private lateinit var job: Job
-    private val uiScope: CoroutineScope
-        get() = CoroutineScope(job + Dispatchers.Main)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        job = Job()
-    }
+    private val factory by lazy { injector.addEditViewModelFactory() }
+    private val viewModel by viewModels<AddEditViewModel>(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = { factory }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,29 +39,31 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.fermentationLiveData.observe(this) {
+            Log.d("DetailsFragment", "observing change $it")
+            name_input.setText(it.title)
+            start_date_input.setText(it.startDate.format(FORMAT))
+            f1_date_input.setText(it.firstEndDate.format(FORMAT))
+            f2_date_input.setText(it.secondEndDate.format(FORMAT))
+        }
         start_date_input.setOnClickListener {
-            uiScope.launchSilent {
+            lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
                 start_date_input.setText(dateTime.format(FORMAT))
             }
         }
         f1_date_input.setOnClickListener {
-            uiScope.launchSilent {
+            lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
                 f1_date_input.setText(dateTime.format(FORMAT))
             }
         }
         f2_date_input.setOnClickListener {
-            uiScope.launchSilent {
+            lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
                 f2_date_input.setText(dateTime.format(FORMAT))
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
     }
 
     companion object {
