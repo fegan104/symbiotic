@@ -1,5 +1,9 @@
 package com.frankegan.symbiotic
 
+import android.text.InputType
+import android.view.WindowManager
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
@@ -69,4 +73,21 @@ suspend inline fun Fragment.openDateTimeDialog(): LocalDateTime = suspendCorouti
             cont.resume(LocalDateTime.of(year, month + 1, day, hour, minute))
         }
     }
+}
+
+suspend fun Fragment.textInputDialog() = suspendCoroutine<String> { cont ->
+    // Set up the input
+    val input = EditText(requireContext()).apply {
+        inputType = InputType.TYPE_CLASS_TEXT
+    }
+    val builder = AlertDialog.Builder(requireContext())
+    val dialog = builder.setTitle("Add Caption")
+        .setView(input)
+        .setPositiveButton("OK") { _, _ -> cont.resume(input.text.toString()) }
+        .setNegativeButton("Cancel") { _, _ -> cont.resume("") }
+        .create().apply {
+            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        }
+
+    dialog.show()
 }

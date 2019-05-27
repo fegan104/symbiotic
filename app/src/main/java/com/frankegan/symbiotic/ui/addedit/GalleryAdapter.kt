@@ -1,6 +1,5 @@
 package com.frankegan.symbiotic.ui.addedit
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,15 @@ import com.bumptech.glide.Glide
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Image
 import java.io.File
+import javax.inject.Inject
 
-class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter @Inject constructor(val listener: (Image) -> Unit) :
+    RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
     private val items = mutableListOf<Image>()
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(item: Image, listener: (Image) -> Unit) {
+        fun bind(item: Image) {
             view.findViewById<TextView>(R.id.caption_text).text = item.caption
             view.findViewById<ImageView>(R.id.image_view).apply {
                 Glide.with(view).load(File(item.filename)).into(this)
@@ -32,9 +33,7 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position]) {
-            Log.d("Gallery", it.toString())
-        }
+        holder.bind(items[position])
     }
 
     fun updateItems(newItems: List<Image>) {

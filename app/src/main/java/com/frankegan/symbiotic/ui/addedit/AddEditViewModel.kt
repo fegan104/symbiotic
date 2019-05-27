@@ -14,10 +14,16 @@ class AddEditViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _fermentationData = MutableLiveData<Fermentation>()
-    val fermentationLiveData: LiveData<Fermentation> = _fermentationData
+    val fermentationData: LiveData<Fermentation> = _fermentationData
 
     private val _ingredientData = MutableLiveData<List<Ingredient>>().apply { value = emptyList() }
     val ingredientData: LiveData<List<Ingredient>> = _ingredientData
+
+    private val _imageData = MutableLiveData<List<Image>>().apply { value = emptyList() }
+    val imageData: LiveData<List<Image>> = _imageData
+
+    private val _noteData = MutableLiveData<Note>()
+    val noteDate: LiveData<Note> = _noteData
 
     fun loadFermentationData(id: String?) = viewModelScope.launchSilent {
         if (id == null) {
@@ -37,6 +43,21 @@ class AddEditViewModel @Inject constructor(
 
     fun saveFermentation(fermentation: Fermentation) = viewModelScope.launchSilent { }
 
+    fun addDetails(
+        name: String = "",
+        start: String = "",
+        first: String = "",
+        second: String = ""
+    ) {
+        val fermentation = fermentationData.value ?: return
+        _fermentationData.value = fermentation.copy(
+            title = if (name.isBlank()) name else fermentation.title,
+            startDate = if (start.isBlank()) LocalDateTime.parse(start) else fermentation.startDate,
+            firstEndDate = if (first.isBlank()) LocalDateTime.parse(first) else fermentation.firstEndDate,
+            secondEndDate = if (second.isBlank()) LocalDateTime.parse(second) else fermentation.secondEndDate
+        )
+    }
+
     fun addIngredient(name: String, quantity: Double, unit: String) {
         val fermentationId = _fermentationData.value?.id ?: return
         val ingredient = Ingredient(
@@ -48,5 +69,24 @@ class AddEditViewModel @Inject constructor(
         _ingredientData.value = listOf(ingredient, *ingredientData.value!!.toTypedArray())
     }
 
-    fun addImage(image: Image) = viewModelScope.launchSilent { }
+    fun addImage(filename: String) {
+        val fermentationId = _fermentationData.value?.id ?: return
+        val image = Image(
+            filename = filename,
+            caption = "",
+            fermentation = fermentationId
+        )
+        _imageData.value = listOf(image, *imageData.value!!.toTypedArray())
+    }
+
+    /**
+     * Change the caption of the selected [Image]. This is done in memory with the understanding it will be persisted
+     * upon the user selecting to save the fermentation later.
+     *
+     * @param filename The key for updating an [Image] record.
+     * @param caption The new caption to add to an [Image] record.
+     */
+    fun addCaption(filename: String, caption: String) {
+        _imageData.value = imageData.value!!.map { if (it.filename == filename) it.copy(caption = caption) else it }
+    }
 }

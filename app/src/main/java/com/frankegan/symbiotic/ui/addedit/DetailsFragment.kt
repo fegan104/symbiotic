@@ -1,7 +1,6 @@
 package com.frankegan.symbiotic.ui.addedit
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,11 @@ import kotlinx.android.synthetic.main.details_fragment.*
 
 const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
 
+const val KEY_NAME = "NAME"
+const val KEY_START = "START"
+const val KEY_FIRST = "FIRST"
+const val KEY_SECOND = "SECOND"
+
 /**
  * A simple [Fragment] subclass.
  *
@@ -27,7 +31,7 @@ const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
 class DetailsFragment : Fragment() {
     private val factory by lazy { injector.addEditViewModelFactory() }
     private val viewModel by viewModels<AddEditViewModel>(
-        ownerProducer = ::requireParentFragment,
+        ownerProducer = ::requireActivity,
         factoryProducer = { factory }
     )
 
@@ -39,8 +43,14 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fermentationLiveData.observe(this) {
-            Log.d("DetailsFragment", "observing change $it")
+        viewModel.addDetails(
+            name = savedInstanceState?.getString(KEY_NAME) ?: "",
+            start = savedInstanceState?.getString(KEY_START) ?: "",
+            first = savedInstanceState?.getString(KEY_FIRST) ?: "",
+            second = savedInstanceState?.getString(KEY_SECOND) ?: ""
+        )
+
+        viewModel.fermentationData.observe(this) {
             name_input.setText(it.title)
             start_date_input.setText(it.startDate.format(FORMAT))
             f1_date_input.setText(it.firstEndDate.format(FORMAT))
@@ -64,6 +74,14 @@ class DetailsFragment : Fragment() {
                 f2_date_input.setText(dateTime.format(FORMAT))
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_NAME, name_input.text.toString())
+        outState.putString(KEY_START, start_date_input.text.toString())
+        outState.putString(KEY_FIRST, f1_date_input.text.toString())
+        outState.putString(KEY_SECOND, f2_date_input.text.toString())
     }
 
     companion object {

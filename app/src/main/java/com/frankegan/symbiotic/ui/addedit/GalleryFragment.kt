@@ -15,9 +15,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
+import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
 import com.frankegan.symbiotic.launchSilent
+import com.frankegan.symbiotic.textInputDialog
 import com.github.florent37.runtimepermission.kotlin.PermissionException
 import com.github.florent37.runtimepermission.kotlin.coroutines.experimental.askPermission
 import kotlinx.android.synthetic.main.gallery_fragment.*
@@ -25,15 +29,42 @@ import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.IOException
 
-const val REQUEST_TAKE_PHOTO = 1
 
 /**
- * A simple [Fragment] subclass.
+ * Request code for taking a photo.
+ */
+const val REQ_TAKE_PHOTO = 1
+
+const val KEY_PATH = "PATH"
+
+/**
+ * A simple [Fragment] subclass for displaying image and captions of fermentations.
  *
  */
 class GalleryFragment : Fragment() {
-    private lateinit var adapter: GalleryAdapter
+    /**
+     * We need to inject a ViewModelFactory to build our ViewModels with custom parameters.
+     */
+    private val factory by lazy { injector.addEditViewModelFactory() }
+    private val viewModel by viewModels<AddEditViewModel>(
+        ownerProducer = ::requireActivity,
+        factoryProducer = { factory }
+    )
+
+    /**
+     * Keeps the latest photo path in memory and retrieves it from savedInstanceState.
+     */
     private var latestPath = ""
+
+    /**
+     * RecyclerView adapter.
+     */
+    private lateinit var adapter: GalleryAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        latestPath = savedInstanceState?.getString(KEY_PATH) ?: return
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,21 +77,33 @@ class GalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = GalleryAdapter()
+        adapter = GalleryAdapter {
+            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+                val input = textInputDialog()
+                if (input.isEmpty()) return@launchWhenResumed
+                viewModel.addCaption(it.filename, input)
+            }
+        }
         gallery_list_view.adapter = adapter
         photo_button.setOnClickListener {
             askForPhoto()
         }
 
+        viewModel.imageData.observe(this) {
+            adapter.updateItems(it)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            Log.d("Gallery", latestPath)
+        if (requestCode == REQ_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            viewModel.addImage(latestPath)
         }
     }
 
+    /**
+     * This method will ask for the necessary permissions to save a photo.
+     */
     private fun askForPhoto() = lifecycleScope.launchSilent {
         try {
             askPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -101,7 +144,7 @@ class GalleryFragment : Fragment() {
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                    startActivityForResult(takePictureIntent, REQ_TAKE_PHOTO)
                 }
             }
         }
@@ -126,8 +169,14 @@ class GalleryFragment : Fragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_PATH, latestPath)
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(): GalleryFragment = GalleryFragment()
     }
 }
+

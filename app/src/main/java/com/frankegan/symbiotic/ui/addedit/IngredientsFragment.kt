@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.ingredients_fragment.*
 class IngredientsFragment : Fragment() {
     private val factory by lazy { injector.addEditViewModelFactory() }
     private val viewModel by viewModels<AddEditViewModel>(
-        ownerProducer = ::requireParentFragment,
+        ownerProducer = ::requireActivity,
         factoryProducer = { factory }
     )
 

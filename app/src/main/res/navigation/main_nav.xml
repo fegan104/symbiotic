@@ -44,5 +44,6 @@
     <fragment android:id="@+id/add_edit_fragment" android:name="com.frankegan.symbiotic.ui.addedit.AddEditFragment"
               tools:layout="@layout/add_edit_fragment" android:label="Details">
         <argument android:name="fermentationId" app:argType="string" app:nullable="true"/>
+        <action android:id="@+id/home_action" app:destination="@id/home_dest"/>
     </fragment>
 </navigation>
