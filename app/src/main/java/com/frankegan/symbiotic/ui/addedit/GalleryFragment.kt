@@ -66,6 +66,11 @@ class GalleryFragment : Fragment() {
         latestPath = savedInstanceState?.getString(KEY_PATH) ?: return
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_PATH, latestPath)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,14 +82,14 @@ class GalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = GalleryAdapter {
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+        gallery_list_view.adapter = GalleryAdapter {
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 val input = textInputDialog()
-                if (input.isEmpty()) return@launchWhenResumed
+                if (input.isEmpty()) return@launchWhenStarted
                 viewModel.addCaption(it.filename, input)
             }
-        }
-        gallery_list_view.adapter = adapter
+        }.apply { adapter = this }
+
         photo_button.setOnClickListener {
             askForPhoto()
         }
@@ -98,6 +103,7 @@ class GalleryFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             viewModel.addImage(latestPath)
+            Log.d("Gallery", latestPath)
         }
     }
 
@@ -125,6 +131,24 @@ class GalleryFragment : Fragment() {
     }
 
     private fun dispatchTakePictureIntent() {
+        @Throws(IOException::class)
+        fun createImageFile(): File {
+            // Create an image file name
+            val timeStamp = LocalDateTime.now().format("yyyyMMdd_HHmmss")
+            val storageDir = Environment
+                .getExternalStoragePublicDirectory("${Environment.DIRECTORY_PICTURES}/Symbiotic").apply {
+                    mkdirs()
+                }
+            return File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+            ).apply {
+                // Save a file: path for use with ACTION_VIEW intents
+                latestPath = absolutePath
+            }
+        }
+
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
@@ -148,30 +172,6 @@ class GalleryFragment : Fragment() {
                 }
             }
         }
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp = LocalDateTime.now().format("yyyyMMdd_HHmmss")
-        val storageDir = Environment
-            .getExternalStoragePublicDirectory("${Environment.DIRECTORY_PICTURES}/Symbiotic").apply {
-                mkdirs()
-            }
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            Log.d("Gallery", absolutePath)
-            latestPath = absolutePath
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(KEY_PATH, latestPath)
     }
 
     companion object {

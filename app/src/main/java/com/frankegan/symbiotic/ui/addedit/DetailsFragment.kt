@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
@@ -43,19 +42,24 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.addDetails(
-            name = savedInstanceState?.getString(KEY_NAME) ?: "",
-            start = savedInstanceState?.getString(KEY_START) ?: "",
-            first = savedInstanceState?.getString(KEY_FIRST) ?: "",
-            second = savedInstanceState?.getString(KEY_SECOND) ?: ""
-        )
+//        viewModel.addDetails(
+//            name = savedInstanceState?.getString(KEY_NAME) ?: "",
+//            start = savedInstanceState?.getString(KEY_START) ?: "",
+//            first = savedInstanceState?.getString(KEY_FIRST) ?: "",
+//            second = savedInstanceState?.getString(KEY_SECOND) ?: ""
+//        )
 
-        viewModel.fermentationData.observe(this) {
-            name_input.setText(it.title)
-            start_date_input.setText(it.startDate.format(FORMAT))
-            f1_date_input.setText(it.firstEndDate.format(FORMAT))
-            f2_date_input.setText(it.secondEndDate.format(FORMAT))
-        }
+//        viewModel.fermentationData.observe(this) {
+//            Log.d("Details", "Fermentation Data: $it")
+//            name_input.setText(it.title)
+//            start_date_input.setText(it.startDate.format(FORMAT))
+//            f1_date_input.setText(it.firstEndDate.format(FORMAT))
+//            f2_date_input.setText(it.secondEndDate.format(FORMAT))
+//        }
+
+//        name_input.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+//            if (!hasFocus) viewModel.addDetails(name = name_input.text.toString())
+//        }
         start_date_input.setOnClickListener {
             lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
@@ -76,13 +80,13 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(KEY_NAME, name_input.text.toString())
-        outState.putString(KEY_START, start_date_input.text.toString())
-        outState.putString(KEY_FIRST, f1_date_input.text.toString())
-        outState.putString(KEY_SECOND, f2_date_input.text.toString())
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putString(KEY_NAME, (name_input?.text ?: "").toString())
+//        outState.putString(KEY_START, (start_date_input?.text ?: "").toString())
+//        outState.putString(KEY_FIRST, (f1_date_input?.text ?: "").toString())
+//        outState.putString(KEY_SECOND, (f2_date_input?.text ?: "").toString())
+//    }
 
     companion object {
         /**

@@ -1,9 +1,11 @@
 package com.frankegan.symbiotic.data
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import kotlinx.android.parcel.Parcelize
 import org.threeten.bp.LocalDateTime
 import java.util.*
 
@@ -31,6 +33,7 @@ data class Image(
 )
 
 @Entity
+@Parcelize
 data class Ingredient(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val name: String,
@@ -41,7 +44,7 @@ data class Ingredient(
         parentColumns = ["id"],
         childColumns = ["fermentation"]
     ) val fermentation: String
-)
+) : Parcelable
 
 @Entity
 data class Note(

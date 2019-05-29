@@ -6,15 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.frankegan.symbiotic.R
-import com.frankegan.symbiotic.data.Fermentation
+import com.frankegan.symbiotic.di.injector
 import kotlinx.android.synthetic.main.home_fragment.*
-import org.threeten.bp.LocalDateTime
 
 class HomeFragment : Fragment() {
 
-    private val viewModel: HomeViewModel by viewModels()
+    /**
+     * We need to inject a ViewModelFactory to build our ViewModels with custom parameters.
+     */
+    private val factory by lazy { injector.homeViewModelFactory() }
+    private val viewModel by viewModels<HomeViewModel>(
+        factoryProducer = { factory }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,17 +33,10 @@ class HomeFragment : Fragment() {
         fab.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = null))
         }
-        recycler_view.adapter = FermentationAdapter().apply {
-            updateItems(
-                listOf(
-                    Fermentation(
-                        title = "Razz",
-                        startDate = LocalDateTime.now().minusWeeks(1),
-                        firstEndDate = LocalDateTime.now().plusWeeks(1),
-                        secondEndDate = LocalDateTime.now().plusWeeks(1).plusDays(4)
-                    )
-                )
-            )
+        viewModel.fermentationData.observe(this) {
+            recycler_view.adapter = FermentationAdapter().apply {
+                updateItems(it)
+            }
         }
     }
 

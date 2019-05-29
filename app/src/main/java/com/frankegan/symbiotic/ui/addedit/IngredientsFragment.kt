@@ -14,6 +14,7 @@ import com.frankegan.symbiotic.data.Ingredient
 import com.frankegan.symbiotic.di.injector
 import kotlinx.android.synthetic.main.ingredients_fragment.*
 
+const val KEY_INGREDIENTS = "INGREDIENTS"
 
 /**
  * This holds the list of ingredients in our kombucha.
@@ -56,21 +57,22 @@ class IngredientsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        savedInstanceState?.getParcelableArrayList<Ingredient>(KEY_INGREDIENTS)?.forEach {
+            viewModel.addIngredient(it.name, it.quantity, it.unit)
+        }
         return inflater.inflate(com.frankegan.symbiotic.R.layout.ingredients_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        list_view.adapter = IngredientsAdapter(
+            context = requireContext(),
+            items = arrayListOf()
+        ).apply { adapter = this }
         viewModel.ingredientData.observe(this) {
             adapter.updateData(it)
         }
         // Inflate the layout for this fragment
-        adapter = IngredientsAdapter(
-            context = requireContext(),
-            items = arrayListOf()
-        )
-        list_view.adapter = adapter
-
         add_button.setOnClickListener {
             viewModel.addIngredient(
                 name = ingredient_name_input.text.toString(),
@@ -87,6 +89,11 @@ class IngredientsFragment : Fragment() {
             setAdapter(adapter)
             listSelection = 0
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(KEY_INGREDIENTS, adapter.items)
     }
 
     companion object {

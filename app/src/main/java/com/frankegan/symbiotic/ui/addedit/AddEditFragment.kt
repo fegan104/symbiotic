@@ -26,6 +26,12 @@ class AddEditFragment : Fragment() {
         factoryProducer = { factory }
     )
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val fermentationId = AddEditFragmentArgs.fromBundle(arguments!!).fermentationId
+        viewModel.loadFermentationData(fermentationId)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,9 +42,8 @@ class AddEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val fermentationId = AddEditFragmentArgs.fromBundle(arguments!!).fermentationId
-        viewModel.loadFermentationData(fermentationId)
         fab.setOnClickListener {
+            viewModel.saveFermentation()
             findNavController().navigate(AddEditFragmentDirections.homeAction())
         }
         val titles = listOf("Details", "Ingredients", "Gallery")
