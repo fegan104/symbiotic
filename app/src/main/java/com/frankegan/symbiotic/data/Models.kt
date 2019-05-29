@@ -22,6 +22,7 @@ data class Fermentation(
 )
 
 @Entity
+@Parcelize
 data class Image(
     @PrimaryKey val filename: String,
     val caption: String,
@@ -30,7 +31,7 @@ data class Image(
         parentColumns = ["id"],
         childColumns = ["fermentation"]
     ) val fermentation: String
-)
+) : Parcelable
 
 @Entity
 @Parcelize

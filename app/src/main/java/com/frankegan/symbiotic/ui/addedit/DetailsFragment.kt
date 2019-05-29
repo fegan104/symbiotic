@@ -15,12 +15,12 @@ import com.frankegan.symbiotic.openDateTimeDialog
 import kotlinx.android.synthetic.main.details_fragment.*
 
 
-const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
+private const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
 
-const val KEY_NAME = "NAME"
-const val KEY_START = "START"
-const val KEY_FIRST = "FIRST"
-const val KEY_SECOND = "SECOND"
+//const val KEY_NAME = "NAME"
+//const val KEY_START = "START"
+//const val KEY_FIRST = "FIRST"
+//const val KEY_SECOND = "SECOND"
 
 /**
  * A simple [Fragment] subclass.

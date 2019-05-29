@@ -100,11 +100,11 @@ class AddEditViewModel @Inject constructor(
         _ingredientData.value = listOf(ingredient, *ingredientData.value!!.toTypedArray())
     }
 
-    fun addImage(filename: String) {
+    fun addImage(filename: String, caption: String = "") {
         val fermentationId = _fermentationData.value?.id ?: return
         val image = Image(
             filename = filename,
-            caption = "",
+            caption = caption,
             fermentation = fermentationId
         )
         _imageData.value = listOf(image, *imageData.value!!.toTypedArray())

@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import com.frankegan.symbiotic.data.Image
 import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
 import com.frankegan.symbiotic.launchSilent
@@ -33,9 +34,10 @@ import java.io.IOException
 /**
  * Request code for taking a photo.
  */
-const val REQ_TAKE_PHOTO = 1
+private const val REQ_TAKE_PHOTO = 1
 
-const val KEY_PATH = "PATH"
+private const val KEY_PATH = "PATH"
+private const val KEY_IMAGES = "IMAGES"
 
 /**
  * A simple [Fragment] subclass for displaying image and captions of fermentations.
@@ -61,14 +63,10 @@ class GalleryFragment : Fragment() {
      */
     private lateinit var adapter: GalleryAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        latestPath = savedInstanceState?.getString(KEY_PATH) ?: return
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(KEY_PATH, latestPath)
+        outState.putParcelableArrayList(KEY_IMAGES, ArrayList(adapter.items))
     }
 
     override fun onCreateView(
@@ -77,6 +75,10 @@ class GalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        savedInstanceState?.getParcelableArrayList<Image>(KEY_IMAGES)?.forEach {
+            viewModel.addImage(it.filename, it.caption)
+        }
+        latestPath = savedInstanceState?.getString(KEY_PATH) ?: ""
         return inflater.inflate(com.frankegan.symbiotic.R.layout.gallery_fragment, container, false)
     }
 

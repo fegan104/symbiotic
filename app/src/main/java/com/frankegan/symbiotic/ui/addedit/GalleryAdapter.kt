@@ -15,7 +15,7 @@ import javax.inject.Inject
 class GalleryAdapter @Inject constructor(val listener: (Image) -> Unit) :
     RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
-    private val items = mutableListOf<Image>()
+    val items = mutableListOf<Image>()
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: Image) {
