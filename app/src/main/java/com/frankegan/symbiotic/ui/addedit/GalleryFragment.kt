@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Image
 import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
@@ -36,7 +37,13 @@ import java.io.IOException
  */
 private const val REQ_TAKE_PHOTO = 1
 
+/**
+ * Keys for retrieving the new photo file path from savedState.
+ */
 private const val KEY_PATH = "PATH"
+/**
+ * Keys for retrieving image data from savedState.
+ */
 private const val KEY_IMAGES = "IMAGES"
 
 /**
@@ -79,7 +86,7 @@ class GalleryFragment : Fragment() {
             viewModel.addImage(it.filename, it.caption)
         }
         latestPath = savedInstanceState?.getString(KEY_PATH) ?: ""
-        return inflater.inflate(com.frankegan.symbiotic.R.layout.gallery_fragment, container, false)
+        return inflater.inflate(R.layout.gallery_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

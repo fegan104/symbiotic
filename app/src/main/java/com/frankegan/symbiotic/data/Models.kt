@@ -49,7 +49,7 @@ data class Ingredient(
 
 @Entity
 data class Note(
-    @PrimaryKey val id: String,
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val content: String,
     @ForeignKey(
         entity = Fermentation::class,

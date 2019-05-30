@@ -33,15 +33,15 @@ class HomeFragment : Fragment() {
         fab.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = null))
         }
-        viewModel.fermentationData.observe(this) {
+        viewModel.fermentationData().observe(this) {
             recycler_view.adapter = FermentationAdapter().apply {
                 updateItems(it)
             }
         }
     }
 
-
-    companion object {
-        fun newInstance() = HomeFragment()
+    override fun onResume() {
+        super.onResume()
+        viewModel.fermentationData()
     }
 }

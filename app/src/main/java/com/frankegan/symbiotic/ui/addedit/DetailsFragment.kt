@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
@@ -15,12 +16,7 @@ import com.frankegan.symbiotic.openDateTimeDialog
 import kotlinx.android.synthetic.main.details_fragment.*
 
 
-private const val FORMAT = "EEE MMM. dd, yyyy, HH:mm"
-
-//const val KEY_NAME = "NAME"
-//const val KEY_START = "START"
-//const val KEY_FIRST = "FIRST"
-//const val KEY_SECOND = "SECOND"
+const val DETAIL_DATE_FORMAT = "EEE MMM. dd, yyyy, HH:mm"
 
 /**
  * A simple [Fragment] subclass.
@@ -42,51 +38,66 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.addDetails(
-//            name = savedInstanceState?.getString(KEY_NAME) ?: "",
-//            start = savedInstanceState?.getString(KEY_START) ?: "",
-//            first = savedInstanceState?.getString(KEY_FIRST) ?: "",
-//            second = savedInstanceState?.getString(KEY_SECOND) ?: ""
-//        )
+        ///////////////////////////
+        //Observe ViewModel LiveData
+        ///////////////////////////
+        viewModel.fermentationData.observe(this) {
+            it ?: return@observe
+            if (name_input?.text?.isBlank() == true) {
+                name_input.setText(it.title)
+                start_date_input.setText(it.startDate.format(DETAIL_DATE_FORMAT))
+                f1_date_input.setText(it.firstEndDate.format(DETAIL_DATE_FORMAT))
+                f2_date_input.setText(it.secondEndDate.format(DETAIL_DATE_FORMAT))
+            } else {
+                if (name_input.text.toString() == it.title) return@observe
+                viewModel.addDetails(
+                    name = name_input.text.toString(),
+                    start = start_date_input.text.toString(),
+                    first = f1_date_input.text.toString(),
+                    second = f2_date_input.text.toString()
+                )
+            }
+        }
+        viewModel.noteData.observe(this) {
+            it ?: return@observe
+            if (notes_input.text.toString() == it.content) return@observe
+            notes_input.setText(it.content)
+        }
 
-//        viewModel.fermentationData.observe(this) {
-//            Log.d("Details", "Fermentation Data: $it")
-//            name_input.setText(it.title)
-//            start_date_input.setText(it.startDate.format(FORMAT))
-//            f1_date_input.setText(it.firstEndDate.format(FORMAT))
-//            f2_date_input.setText(it.secondEndDate.format(FORMAT))
-//        }
-
-//        name_input.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-//            if (!hasFocus) viewModel.addDetails(name = name_input.text.toString())
-//        }
+        ///////////////////////////
+        //Save view state in ViewModel
+        ///////////////////////////
+        name_input.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) viewModel.addDetails(name = name_input.text.toString())
+        }
         start_date_input.setOnClickListener {
             lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
-                start_date_input.setText(dateTime.format(FORMAT))
+                val str = dateTime.format(DETAIL_DATE_FORMAT)
+                start_date_input.setText(str)
+                viewModel.addDetails(start = str)
             }
         }
         f1_date_input.setOnClickListener {
             lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
-                f1_date_input.setText(dateTime.format(FORMAT))
+                val str = dateTime.format(DETAIL_DATE_FORMAT)
+                f1_date_input.setText(str)
+                viewModel.addDetails(first = str)
             }
         }
         f2_date_input.setOnClickListener {
             lifecycleScope.launchSilent {
                 val dateTime = openDateTimeDialog()
-                f2_date_input.setText(dateTime.format(FORMAT))
+                val str = dateTime.format(DETAIL_DATE_FORMAT)
+                f2_date_input.setText(str)
+                viewModel.addDetails(second = str)
             }
         }
+        notes_input.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) viewModel.addNote(content = notes_input.text.toString())
+        }
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putString(KEY_NAME, (name_input?.text ?: "").toString())
-//        outState.putString(KEY_START, (start_date_input?.text ?: "").toString())
-//        outState.putString(KEY_FIRST, (f1_date_input?.text ?: "").toString())
-//        outState.putString(KEY_SECOND, (f2_date_input?.text ?: "").toString())
-//    }
 
     companion object {
         /**
