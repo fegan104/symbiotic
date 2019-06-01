@@ -28,33 +28,9 @@ class IngredientsFragment : Fragment() {
 
     private lateinit var adapter: IngredientsAdapter
 
-    private inner class IngredientsAdapter(
-        context: Context,
-        resource: Int = com.frankegan.symbiotic.R.layout.ingredients_item,
-        val items: ArrayList<Ingredient>
-    ) : ArrayAdapter<Ingredient>(context, resource, items) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val ingredientView = convertView ?: LayoutInflater
-                .from(requireContext())
-                .inflate(com.frankegan.symbiotic.R.layout.ingredients_item, parent, false)
-            items[position].apply {
-                ingredientView.findViewById<TextView>(com.frankegan.symbiotic.R.id.name_text).text = name
-                ingredientView.findViewById<TextView>(com.frankegan.symbiotic.R.id.quantityt_text).text =
-                    quantity.toString()
-                ingredientView.findViewById<TextView>(com.frankegan.symbiotic.R.id.unit_text).text = unit
-            }
-            return ingredientView
-        }
-
-        fun updateData(new: List<Ingredient>) {
-            clear()
-            new.forEachIndexed { index, ingredient -> insert(ingredient, index) }
-            notifyDataSetChanged()
-        }
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         savedInstanceState?.getParcelableArrayList<Ingredient>(KEY_INGREDIENTS)?.forEach {
@@ -72,13 +48,16 @@ class IngredientsFragment : Fragment() {
         viewModel.ingredientData.observe(this) {
             adapter.updateData(it)
         }
-        // Inflate the layout for this fragment
+        // Drop down menu
         add_button.setOnClickListener {
             viewModel.addIngredient(
                 name = ingredient_name_input.text.toString(),
                 quantity = ingredient_quantity_input.text.toString().toDoubleOrNull() ?: 0.0,
                 unit = exposed_dropdown.editableText.toString()
             )
+            ingredient_name_input.setText("")
+            ingredient_quantity_input.setText("")
+            exposed_dropdown.setText("")
         }
         val adapter = ArrayAdapter(
             requireContext(),
@@ -103,5 +82,30 @@ class IngredientsFragment : Fragment() {
          */
         @JvmStatic
         fun newInstance() = IngredientsFragment()
+    }
+}
+
+private class IngredientsAdapter(
+    context: Context,
+    resource: Int = com.frankegan.symbiotic.R.layout.ingredients_item,
+    val items: ArrayList<Ingredient>
+) : ArrayAdapter<Ingredient>(context, resource, items) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val ingredientView = convertView ?: LayoutInflater
+            .from(context)
+            .inflate(com.frankegan.symbiotic.R.layout.ingredients_item, parent, false)
+        items[position].apply {
+            ingredientView.findViewById<TextView>(com.frankegan.symbiotic.R.id.name_text).text = name
+            ingredientView.findViewById<TextView>(com.frankegan.symbiotic.R.id.quantityt_text).text =
+                quantity.toString()
+            ingredientView.findViewById<TextView>(com.frankegan.symbiotic.R.id.unit_text).text = unit
+        }
+        return ingredientView
+    }
+
+    fun updateData(new: List<Ingredient>) {
+        clear()
+        new.forEachIndexed { index, ingredient -> insert(ingredient, index) }
+        notifyDataSetChanged()
     }
 }
