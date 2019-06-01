@@ -1,6 +1,5 @@
 package com.frankegan.symbiotic.ui.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Fermentation
 
-class FermentationAdapter : RecyclerView.Adapter<FermentationAdapter.FermentationHolder>() {
+class FermentationAdapter(val listener: (Fermentation) -> Unit) :
+    RecyclerView.Adapter<FermentationAdapter.FermentationHolder>() {
     /**
      * Backing data source.
      */
     private val items = mutableListOf<Fermentation>()
 
     inner class FermentationHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(item: Fermentation, listener: (Fermentation) -> Unit) {
+        fun bind(item: Fermentation) {
             view.findViewById<TextView>(R.id.item_title_text).text = item.title
             view.findViewById<ImageView>(R.id.item_thumbnail).setOnClickListener { listener(item) }
         }
@@ -29,11 +29,7 @@ class FermentationAdapter : RecyclerView.Adapter<FermentationAdapter.Fermentatio
 
     override fun getItemCount() = items.size
 
-    override fun onBindViewHolder(holder: FermentationHolder, position: Int) {
-        holder.bind(items[position]) {
-            Log.d("Home", it.toString())
-        }
-    }
+    override fun onBindViewHolder(holder: FermentationHolder, position: Int) = holder.bind(items[position])
 
     fun updateItems(newItems: List<Fermentation>) {
         items.clear()

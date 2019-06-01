@@ -43,7 +43,7 @@ class DetailsFragment : Fragment() {
         ///////////////////////////
         viewModel.fermentationData.observe(this) {
             it ?: return@observe
-            if (name_input?.text?.isBlank() == true) {
+            if (name_input?.text?.isBlank() == true || (name_input?.text.toString() != it.title)) {
                 name_input.setText(it.title)
                 start_date_input.setText(it.startDate.format(DETAIL_DATE_FORMAT))
                 f1_date_input.setText(it.firstEndDate.format(DETAIL_DATE_FORMAT))

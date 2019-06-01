@@ -121,4 +121,11 @@ class AddEditViewModel @Inject constructor(
         val note = noteData.value ?: Note(content = content, fermentation = fermentation.id)
         _noteData.value = note.copy(content = content)
     }
+
+    fun clearState() {
+        _fermentationData.value = null
+        _ingredientData.value = emptyList()
+        _imageData.value = emptyList()
+        _noteData.value = null
+    }
 }

@@ -42,10 +42,16 @@ class AddEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /////////////////
+        //FAB Actions
+        /////////////////
         fab.setOnClickListener {
             viewModel.saveFermentation()
             findNavController().navigate(AddEditFragmentDirections.homeAction())
         }
+        /////////////////
+        //Setup Tabs and ViewPager
+        /////////////////
         val titles = listOf("Details", "Ingredients", "Gallery")
         view_pager.adapter =
             object : FragmentPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
