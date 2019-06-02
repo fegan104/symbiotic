@@ -31,9 +31,15 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /////////////////
+        //FAB click listener
+        /////////////////
         fab.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = null))
+            findNavController().navigate(HomeFragmentDirections.addEditAction())
         }
+        /////////////////
+        //Observe Fermentation Data
+        /////////////////
         viewModel.fermentationData().observe(this) {
             recycler_view.adapter = FermentationAdapter {
                 findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))

@@ -16,7 +16,7 @@ interface SymbioticDataSource {
     suspend fun getImages(fermentationId: String): Result<List<Image>>
     suspend fun deleteImage(filename: String): Result<String>
 
-    suspend fun getNotes(fermentationId: String): Result<List<Note>>
+    suspend fun getNote(fermentationId: String): Result<Note>
     suspend fun createNote(note: Note): Result<Note>
     suspend fun deleteNote(id: String): Result<String>
 }

@@ -8,7 +8,9 @@
               android:name="com.frankegan.symbiotic.ui.home.HomeFragment"
               android:label="Fermentations"
               tools:layout="@layout/home_fragment">
-        <action android:id="@+id/add_edit_action" app:destination="@id/add_edit_fragment"/>
+        <action android:id="@+id/add_edit_action" app:destination="@id/add_edit_fragment">
+            <argument android:defaultValue="@null" android:name="fermentationId"/>
+        </action>
     </fragment>
 
     <fragment

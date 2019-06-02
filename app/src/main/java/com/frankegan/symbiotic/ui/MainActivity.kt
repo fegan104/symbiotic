@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         bottomNav?.setupWithNavController(navController)
     }
 
+    /**
+     * Probably not necessary unless we add a nav drawer.
+     */
     override fun onSupportNavigateUp(): Boolean {
         // Allows NavigationUI to support proper up navigation or the drawer layout
         // drawer menu, depending on the situation
