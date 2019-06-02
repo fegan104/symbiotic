@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frankegan.symbiotic.data.*
 import com.frankegan.symbiotic.launchSilent
+import com.frankegan.symbiotic.notifications.NotificationWorker
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -16,16 +17,20 @@ class AddEditViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _fermentationData = MutableLiveData<Fermentation?>()
-    val fermentationData: LiveData<Fermentation?> = _fermentationData
+    val fermentationData: LiveData<Fermentation?>
+        get() = _fermentationData
 
     private val _ingredientData = MutableLiveData<List<Ingredient>>().apply { value = emptyList() }
-    val ingredientData: LiveData<List<Ingredient>> = _ingredientData
+    val ingredientData: LiveData<List<Ingredient>>
+        get() = _ingredientData
 
     private val _imageData = MutableLiveData<List<Image>>().apply { value = emptyList() }
-    val imageData: LiveData<List<Image>> = _imageData
+    val imageData: LiveData<List<Image>>
+        get() = _imageData
 
     private val _noteData = MutableLiveData<Note?>()
-    val noteData: LiveData<Note?> = _noteData
+    val noteData: LiveData<Note?>
+        get() = _noteData
 
     fun loadFermentationData(id: String?) {
         if (id == null) {
@@ -35,6 +40,9 @@ class AddEditViewModel @Inject constructor(
                 firstEndDate = LocalDateTime.now().plusDays(10),
                 secondEndDate = LocalDateTime.now().plusDays(14)
             )
+            _imageData.value = emptyList()
+            _ingredientData.value = emptyList()
+            _noteData.value = null
             return
         }
         viewModelScope.launch {
@@ -42,9 +50,24 @@ class AddEditViewModel @Inject constructor(
                 is Result.Success -> result.data
                 is Result.Error -> null
             }
+            _ingredientData.value = when (val result = symbioticRepo.getIngredients(id)) {
+                is Result.Success -> result.data
+                is Result.Error -> null
+            }
+            _imageData.value = when (val result = symbioticRepo.getImages(id)) {
+                is Result.Success -> result.data
+                is Result.Error -> null
+            }
+            _noteData.value = when (val result = symbioticRepo.getNote(id)) {
+                is Result.Success -> result.data
+                is Result.Error -> null
+            }
         }
     }
 
+    /**
+     * Persist data and schedule reminder notifications for the new fermentation.
+     */
     fun saveFermentation() = viewModelScope.launchSilent {
         val fermentation = fermentationData.value ?: return@launchSilent
         symbioticRepo.createFermentation(fermentation)
@@ -61,6 +84,8 @@ class AddEditViewModel @Inject constructor(
         val note = noteData.value ?: return@launchSilent
         symbioticRepo.createNote(note)
         _noteData.value = null
+
+        NotificationWorker.enqueueWork(fermentation)
     }
 
     fun addDetails(
@@ -120,5 +145,17 @@ class AddEditViewModel @Inject constructor(
         val fermentation = fermentationData.value ?: return
         val note = noteData.value ?: Note(content = content, fermentation = fermentation.id)
         _noteData.value = note.copy(content = content)
+    }
+
+    /**
+     * Removes the fermentation and related data and cancels any pending reminders about the fermentation.
+     */
+    fun deleteFermentation() = viewModelScope.launchSilent {
+        val fermentation = fermentationData.value ?: return@launchSilent
+        NotificationWorker.cancelWork(fermentation)
+        symbioticRepo.deleteFermentation(fermentation.id)
+        imageData.value?.forEach { symbioticRepo.deleteImage(it.filename) }
+        ingredientData.value?.forEach { symbioticRepo.deleteIngredient(it.id) }
+        symbioticRepo.deleteNote(noteData.value?.id ?: return@launchSilent)
     }
 }

@@ -97,8 +97,8 @@ class LocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSo
         Result.Error(exception)
     }
 
-    override suspend fun getNotes(fermentationId: String) = try {
-        val result = database.noteDao().selectByFermentation(fermentationId)
+    override suspend fun getNote(fermentationId: String) = try {
+        val result = database.noteDao().selectByFermentation(fermentationId).first()
         Result.Success(result)
     } catch (exception: Exception) {
         Result.Error(exception)

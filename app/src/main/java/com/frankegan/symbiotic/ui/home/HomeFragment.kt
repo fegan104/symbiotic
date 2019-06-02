@@ -23,18 +23,27 @@ class HomeFragment : Fragment() {
     )
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /////////////////
+        //FAB click listener
+        /////////////////
         fab.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = null))
+            findNavController().navigate(HomeFragmentDirections.addEditAction())
         }
+        /////////////////
+        //Observe Fermentation Data
+        /////////////////
         viewModel.fermentationData().observe(this) {
-            recycler_view.adapter = FermentationAdapter().apply {
+            recycler_view.adapter = FermentationAdapter {
+                findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))
+            }.apply {
                 updateItems(it)
             }
         }

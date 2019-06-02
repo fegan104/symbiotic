@@ -5,6 +5,7 @@ import com.frankegan.symbiotic.di.AppModule
 import com.frankegan.symbiotic.di.DaggerComponentProvider
 import com.frankegan.symbiotic.di.DaggerSymbioticComponent
 import com.frankegan.symbiotic.di.SymbioticComponent
+import com.frankegan.symbiotic.notifications.createReminderChannel
 import com.jakewharton.threetenabp.AndroidThreeTen
 
 class SymbioticApp : Application(), DaggerComponentProvider {
@@ -18,5 +19,6 @@ class SymbioticApp : Application(), DaggerComponentProvider {
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
+        createReminderChannel(this)
     }
 }

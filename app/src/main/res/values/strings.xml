@@ -2,4 +2,14 @@
     <string name="app_name">symbiotic</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="channel_fermentation_reminder">Fermentation Reminder</string>
+    <string name="channel_desc_fermentation">Reminders about when fermentations are done.</string>
+
+    <string-array name="add_edit">
+        <item>Details</item>
+        <item>Ingredients</item>
+        <item>Gallery</item>
+    </string-array>
 </resources>
