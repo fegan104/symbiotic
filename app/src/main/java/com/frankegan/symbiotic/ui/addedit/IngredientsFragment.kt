@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.frankegan.symbiotic.data.Ingredient
 import com.frankegan.symbiotic.di.injector
+import com.stepstone.stepper.Step
+import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.ingredients_fragment.*
 
 const val KEY_INGREDIENTS = "INGREDIENTS"
@@ -19,7 +21,7 @@ const val KEY_INGREDIENTS = "INGREDIENTS"
 /**
  * This holds the list of ingredients in our kombucha.
  */
-class IngredientsFragment : Fragment() {
+class IngredientsFragment : Fragment(), Step {
     private val factory by lazy { injector.addEditViewModelFactory() }
     private val viewModel by viewModels<AddEditViewModel>(
         ownerProducer = ::requireActivity,
@@ -74,6 +76,12 @@ class IngredientsFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(KEY_INGREDIENTS, adapter.items)
     }
+
+    override fun onSelected() = Unit
+
+    override fun verifyStep(): VerificationError? = null
+
+    override fun onError(error: VerificationError) = Unit
 
     companion object {
         /**

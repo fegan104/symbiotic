@@ -26,6 +26,8 @@ import com.frankegan.symbiotic.launchSilent
 import com.frankegan.symbiotic.textInputDialog
 import com.github.florent37.runtimepermission.kotlin.PermissionException
 import com.github.florent37.runtimepermission.kotlin.coroutines.experimental.askPermission
+import com.stepstone.stepper.Step
+import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.gallery_fragment.*
 import org.threeten.bp.LocalDateTime
 import java.io.File
@@ -50,7 +52,7 @@ private const val KEY_IMAGES = "IMAGES"
  * A simple [Fragment] subclass for displaying image and captions of fermentations.
  *
  */
-class GalleryFragment : Fragment() {
+class GalleryFragment : Fragment(), Step {
     /**
      * We need to inject a ViewModelFactory to build our ViewModels with custom parameters.
      */
@@ -182,6 +184,12 @@ class GalleryFragment : Fragment() {
             }
         }
     }
+
+    override fun onSelected() = Unit
+
+    override fun verifyStep(): VerificationError? = null
+
+    override fun onError(error: VerificationError) = Unit
 
     companion object {
         @JvmStatic

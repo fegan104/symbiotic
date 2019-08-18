@@ -13,6 +13,8 @@ import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
 import com.frankegan.symbiotic.launchSilent
 import com.frankegan.symbiotic.openDateTimeDialog
+import com.stepstone.stepper.Step
+import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.details_fragment.*
 
 
@@ -23,7 +25,7 @@ const val DETAIL_DATE_FORMAT = "EEE MMM. dd, yyyy, HH:mm"
  *
  * This contains the fermentations name, date and time for notifications and extra notes about the fermentation.
  */
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), Step {
     private val factory by lazy { injector.addEditViewModelFactory() }
     private val viewModel by viewModels<AddEditViewModel>(
         ownerProducer = ::requireActivity,
@@ -98,6 +100,12 @@ class DetailsFragment : Fragment() {
             if (!hasFocus) viewModel.addNote(content = notes_input.text.toString())
         }
     }
+
+    override fun onSelected() = Unit
+
+    override fun verifyStep(): VerificationError? = null
+
+    override fun onError(error: VerificationError) = Unit
 
     companion object {
         /**

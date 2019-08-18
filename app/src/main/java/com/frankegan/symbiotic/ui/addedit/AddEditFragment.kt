@@ -1,11 +1,9 @@
 package com.frankegan.symbiotic.ui.addedit
 
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -50,19 +48,7 @@ class AddEditFragment : Fragment() {
         //Setup Tabs and ViewPager
         /////////////////
         val titles = resources.getStringArray(R.array.add_edit)
-        view_pager.adapter =
-            object : FragmentPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-                override fun getCount() = titles.size
-                override fun getPageTitle(position: Int) = titles[position]
-                override fun getItem(position: Int) = when (position) {
-                    0 -> DetailsFragment.newInstance()
-                    1 -> IngredientsFragment.newInstance()
-                    2 -> GalleryFragment.newInstance()
-                    else -> throw Error("Impossible state in ViewPager")
-                }
-            }
-        tab_layout.setupWithViewPager(view_pager)
-        tab_layout.setTabTextColors(Color.parseColor("#80ffffff"), Color.parseColor("white"))
+        stepper_layout.adapter = AddEditStepperAdapter(requireFragmentManager(), requireContext())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
