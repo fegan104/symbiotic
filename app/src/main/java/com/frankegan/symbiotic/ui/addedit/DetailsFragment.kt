@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.details_fragment.*
 
 
 const val DETAIL_DATE_FORMAT = "EEE MMM. dd, yyyy, HH:mm"
+private const val MISSING_NAME = "MISSING_NAME"
 
 /**
  * A simple [Fragment] subclass.
@@ -103,9 +104,17 @@ class DetailsFragment : Fragment(), Step {
 
     override fun onSelected() = Unit
 
-    override fun verifyStep(): VerificationError? = null
+    override fun verifyStep(): VerificationError? {
+        return if (name_input.text.isNullOrBlank()) {
+            VerificationError(MISSING_NAME)
+        } else null
+    }
 
-    override fun onError(error: VerificationError) = Unit
+    override fun onError(error: VerificationError) {
+        if (error.errorMessage == MISSING_NAME) {
+            name_input_layout.error = "Please add a name for the brew"
+        }
+    }
 
     companion object {
         /**

@@ -9,19 +9,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.di.injector
+import com.stepstone.stepper.StepperLayout
+import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.add_edit_fragment.*
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class AddEditFragment : Fragment() {
+class AddEditFragment : Fragment(), StepperLayout.StepperListener {
 
     /**
      * Safe args from Navigation Manager.
      */
     private val safeArgs by navArgs<AddEditFragmentArgs>()
-
     private val factory by lazy { injector.addEditViewModelFactory() }
     private val viewModel by viewModels<AddEditViewModel>(
         ownerProducer = ::requireActivity,
@@ -47,8 +48,11 @@ class AddEditFragment : Fragment() {
         /////////////////
         //Setup Tabs and ViewPager
         /////////////////
-        val titles = resources.getStringArray(R.array.add_edit)
-        stepper_layout.adapter = AddEditStepperAdapter(requireFragmentManager(), requireContext())
+        stepper_layout.apply {
+            adapter = AddEditStepperAdapter(requireFragmentManager(), requireContext())
+            setCompleteButtonEnabled(true)
+            setListener(this@AddEditFragment)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -58,15 +62,22 @@ class AddEditFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.save_data -> {
-                viewModel.saveFermentation()
-                findNavController().navigate(AddEditFragmentDirections.homeAction())
-            }
             R.id.delete_data -> {
                 viewModel.deleteFermentation()
                 findNavController().navigate(AddEditFragmentDirections.homeAction())
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onStepSelected(newStepPosition: Int) = Unit
+
+    override fun onError(verificationError: VerificationError?) = Unit
+
+    override fun onReturn() = Unit
+
+    override fun onCompleted(completeButton: View?) {
+        viewModel.saveFermentation()
+        findNavController().navigate(AddEditFragmentDirections.homeAction())
     }
 }
