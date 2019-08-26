@@ -1,7 +1,8 @@
 package com.frankegan.symbiotic.ui.home
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.liveData
 import com.frankegan.symbiotic.data.Result
 import com.frankegan.symbiotic.data.SymbioticRepository
@@ -9,8 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    private val symbioticRepo: SymbioticRepository
-) : ViewModel() {
+    private val symbioticRepo: SymbioticRepository,
+    app: Application
+) : AndroidViewModel(app) {
 
     fun fermentationData() = liveData(Dispatchers.IO) {
         when (val result = symbioticRepo.getFermentations()) {

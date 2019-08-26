@@ -1,5 +1,6 @@
 package com.frankegan.symbiotic.di
 
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Lazy
@@ -11,7 +12,7 @@ import javax.inject.Inject
  *      @Inject
  *      lateinit var factory: VMInjectionFactory<MyViewModel>
  */
-class VMInjectionFactory<VM : ViewModel> @Inject constructor(
+class VMInjectionFactory<VM : AndroidViewModel> @Inject constructor(
     private val viewModel: Lazy<VM>
 ) : ViewModelProvider.Factory {
 

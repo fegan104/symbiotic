@@ -49,7 +49,7 @@ class AddEditFragment : Fragment(), StepperLayout.StepperListener {
         //Setup Tabs and ViewPager
         /////////////////
         stepper_layout.apply {
-            adapter = AddEditStepperAdapter(requireFragmentManager(), requireContext())
+            adapter = AddEditStepperAdapter(childFragmentManager, requireContext())
             setCompleteButtonEnabled(true)
             setListener(this@AddEditFragment)
         }
@@ -70,7 +70,10 @@ class AddEditFragment : Fragment(), StepperLayout.StepperListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStepSelected(newStepPosition: Int) = Unit
+    override fun onStepSelected(newStepPosition: Int) {
+        val titles = requireContext().resources.getStringArray(R.array.add_edit)
+        activity?.title = titles[newStepPosition]
+    }
 
     override fun onError(verificationError: VerificationError?) = Unit
 

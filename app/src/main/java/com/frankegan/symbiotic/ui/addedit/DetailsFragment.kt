@@ -112,7 +112,7 @@ class DetailsFragment : Fragment(), Step {
 
     override fun onError(error: VerificationError) {
         if (error.errorMessage == MISSING_NAME) {
-            name_input_layout.error = "Please add a name for the brew"
+            name_input_layout.error = getString(R.string.please_add_name)
         }
     }
 

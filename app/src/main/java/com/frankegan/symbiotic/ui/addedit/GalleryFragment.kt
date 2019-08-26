@@ -99,7 +99,7 @@ class GalleryFragment : Fragment(), Step {
                 if (input.isEmpty()) return@launchWhenStarted
                 viewModel.addCaption(it.filename, input)
             }
-        }.apply { adapter = this }
+        }.also { adapter = it }
 
         photo_button.setOnClickListener {
             askForPhoto()

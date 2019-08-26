@@ -18,7 +18,8 @@ private const val REMINDER_TYPE = "REMINDER_TYPE"
  * A [Worker] that displays a notification alerting the user that their fermentation time has elapsed. Use
  * the [NotificationWorker.enqueueWork] function to schedule these notifications.
  */
-class NotificationWorker(val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+class NotificationWorker(val context: Context, params: WorkerParameters) :
+    CoroutineWorker(context, params) {
 
     private val fermentationId = params.inputData.getString(FERMENTATION_ID)!!
     private val reminderType = params.inputData.getString(REMINDER_TYPE)!!
@@ -43,10 +44,12 @@ class NotificationWorker(val context: Context, params: WorkerParameters) : Corou
          * @return The [Operation] for enqueueing the two [NotificationWorker] requests.
          */
         @JvmStatic
-        fun enqueueWork(fermentation: Fermentation): Operation {
+        fun enqueueWork(context: Context, fermentation: Fermentation): Operation {
             //Calculate delay in minute until notification should show
-            val firstDelay = LocalDateTime.now().until(fermentation.firstEndDate, ChronoUnit.MINUTES)
-            val secondDelay = LocalDateTime.now().until(fermentation.secondEndDate, ChronoUnit.MINUTES)
+            val firstDelay =
+                LocalDateTime.now().until(fermentation.firstEndDate, ChronoUnit.MINUTES)
+            val secondDelay =
+                LocalDateTime.now().until(fermentation.secondEndDate, ChronoUnit.MINUTES)
 
             val firstReminder = OneTimeWorkRequestBuilder<NotificationWorker>()
                 .setInitialDelay(firstDelay, TimeUnit.MINUTES)
@@ -70,12 +73,14 @@ class NotificationWorker(val context: Context, params: WorkerParameters) : Corou
                 )
                 .build()
 
-            return WorkManager.getInstance().enqueue(listOf(firstReminder, secondReminder))
+            return WorkManager.getInstance(context).enqueue(listOf(firstReminder, secondReminder))
         }
 
         /**
          * Cancels work for the specified fermentation.
          */
-        fun cancelWork(fermentation: Fermentation) = WorkManager.getInstance().cancelAllWorkByTag(fermentation.id)
+        @JvmStatic
+        fun cancelWork(context: Context, fermentation: Fermentation) =
+            WorkManager.getInstance(context).cancelAllWorkByTag(fermentation.id)
     }
 }
