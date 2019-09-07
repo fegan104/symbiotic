@@ -1,65 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.addedit.AddEditFragment">
+        android:layout_height="match_parent">
 
-    <!--<com.google.android.material.tabs.TabLayout-->
-    <!--android:id="@+id/tabs"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent">-->
-
-    <!--<com.google.android.material.tabs.TabItem-->
-    <!--android:text="Details"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"/>-->
-    <!--<com.google.android.material.tabs.TabItem-->
-    <!--android:text="Ingredients"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"/>-->
-    <!--<com.google.android.material.tabs.TabItem-->
-    <!--android:text="Gallery"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"/>-->
-
-
-    <!--</com.google.android.material.tabs.TabLayout>-->
-
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
+    <com.stepstone.stepper.StepperLayout
+            android:id="@+id/stepper_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabBackground="?attr/colorPrimary"
-            app:tabSelectedTextColor="@color/white"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"/>
-
-    <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/tab_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:src="@drawable/ic_check_black_24dp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--android:layout_marginEnd="16dp" app:layout_constraintStart_toStartOf="parent"-->
-    <!--android:layout_marginStart="8dp" android:layout_marginBottom="16dp"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"-->
-    <!--app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="1.0"-->
-    <!--app:layout_constraintHorizontal_bias="1.0" android:id="@+id/fab"/>-->
+            app:ms_backButtonBackground="@android:color/transparent"
+            app:ms_backButtonColor="@color/colorPrimary"
+            app:ms_completeButtonColor="@color/colorPrimary"
+            app:ms_completeButtonText="@string/save"
+            app:ms_nextButtonColor="@color/colorPrimary"
+            app:ms_stepperType="progress_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

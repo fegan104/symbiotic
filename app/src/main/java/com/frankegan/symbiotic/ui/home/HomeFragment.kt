@@ -13,6 +13,7 @@ import com.frankegan.symbiotic.di.injector
 import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
+    private lateinit var adapter: FermentationAdapter
 
     /**
      * We need to inject a ViewModelFactory to build our ViewModels with custom parameters.
@@ -27,6 +28,9 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        adapter = FermentationAdapter {
+            findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))
+        }
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
@@ -40,12 +44,9 @@ class HomeFragment : Fragment() {
         /////////////////
         //Observe Fermentation Data
         /////////////////
+        recycler_view.adapter = adapter
         viewModel.fermentationData().observe(this) {
-            recycler_view.adapter = FermentationAdapter {
-                findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))
-            }.apply {
-                updateItems(it)
-            }
+            adapter.updateItems(it)
         }
     }
 

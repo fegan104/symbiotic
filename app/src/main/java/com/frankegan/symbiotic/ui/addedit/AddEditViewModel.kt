@@ -1,8 +1,9 @@
 package com.frankegan.symbiotic.ui.addedit
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frankegan.symbiotic.data.*
 import com.frankegan.symbiotic.launchSilent
@@ -13,8 +14,9 @@ import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 class AddEditViewModel @Inject constructor(
+    private val app: Application,
     private val symbioticRepo: SymbioticRepository
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     private val _fermentationData = MutableLiveData<Fermentation?>()
     val fermentationData: LiveData<Fermentation?>
@@ -85,7 +87,7 @@ class AddEditViewModel @Inject constructor(
         symbioticRepo.createNote(note)
         _noteData.value = null
 
-        NotificationWorker.enqueueWork(fermentation)
+        NotificationWorker.enqueueWork(app, fermentation)
     }
 
     fun addDetails(
@@ -117,7 +119,7 @@ class AddEditViewModel @Inject constructor(
             unit = unit,
             fermentation = fermentationId
         )
-        _ingredientData.value = listOf(ingredient, *ingredientData.value!!.toTypedArray())
+        _ingredientData.value = ingredientData.value!! + ingredient
     }
 
     fun addImage(filename: String, caption: String = "") {
@@ -138,7 +140,9 @@ class AddEditViewModel @Inject constructor(
      * @param caption The new caption to add to an [Image] record.
      */
     fun addCaption(filename: String, caption: String) {
-        _imageData.value = imageData.value!!.map { if (it.filename == filename) it.copy(caption = caption) else it }
+        _imageData.value = imageData.value!!.map {
+            if (it.filename == filename) it.copy(caption = caption) else it
+        }
     }
 
     fun addNote(content: String) {
@@ -152,10 +156,14 @@ class AddEditViewModel @Inject constructor(
      */
     fun deleteFermentation() = viewModelScope.launchSilent {
         val fermentation = fermentationData.value ?: return@launchSilent
-        NotificationWorker.cancelWork(fermentation)
+        NotificationWorker.cancelWork(app, fermentation)
         symbioticRepo.deleteFermentation(fermentation.id)
         imageData.value?.forEach { symbioticRepo.deleteImage(it.filename) }
         ingredientData.value?.forEach { symbioticRepo.deleteIngredient(it.id) }
         symbioticRepo.deleteNote(noteData.value?.id ?: return@launchSilent)
+    }
+
+    fun deleteIngredient(ingredient: Ingredient) {
+        _ingredientData.value = ingredientData.value?.filter { it != ingredient }
     }
 }

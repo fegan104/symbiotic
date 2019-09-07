@@ -13,17 +13,20 @@ import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.format
 import com.frankegan.symbiotic.launchSilent
 import com.frankegan.symbiotic.openDateTimeDialog
+import com.stepstone.stepper.Step
+import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.details_fragment.*
 
 
 const val DETAIL_DATE_FORMAT = "EEE MMM. dd, yyyy, HH:mm"
+private const val MISSING_NAME = "MISSING_NAME"
 
 /**
  * A simple [Fragment] subclass.
  *
  * This contains the fermentations name, date and time for notifications and extra notes about the fermentation.
  */
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), Step {
     private val factory by lazy { injector.addEditViewModelFactory() }
     private val viewModel by viewModels<AddEditViewModel>(
         ownerProducer = ::requireActivity,
@@ -96,6 +99,20 @@ class DetailsFragment : Fragment() {
         }
         notes_input.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) viewModel.addNote(content = notes_input.text.toString())
+        }
+    }
+
+    override fun onSelected() = Unit
+
+    override fun verifyStep(): VerificationError? {
+        return if (name_input.text.isNullOrBlank()) {
+            VerificationError(MISSING_NAME)
+        } else null
+    }
+
+    override fun onError(error: VerificationError) {
+        if (error.errorMessage == MISSING_NAME) {
+            name_input_layout.error = getString(R.string.please_add_name)
         }
     }
 
