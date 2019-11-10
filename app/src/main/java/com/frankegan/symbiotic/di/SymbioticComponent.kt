@@ -1,6 +1,5 @@
 package com.frankegan.symbiotic.di
 
-import com.frankegan.symbiotic.data.SymbioticRepository
 import com.frankegan.symbiotic.notifications.NotificationWorker
 import com.frankegan.symbiotic.ui.addedit.AddEditFragment
 import com.frankegan.symbiotic.ui.addedit.DetailsFragment
@@ -13,8 +12,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [DataModule::class])
 interface SymbioticComponent {
-
-    fun symbioticRepository(): SymbioticRepository
 
     fun inject(fragment: HomeFragment)
 

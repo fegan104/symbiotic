@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Fermentation
 import com.frankegan.symbiotic.ui.MainActivity
 
@@ -40,7 +41,7 @@ fun showReminderNotification(context: Context, fermentation: Fermentation, remin
     val pendingIntent = PendingIntent.getActivity(context, 1, intent, 0)
 
     val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID_REMINDER).apply {
-        setSmallIcon(com.frankegan.symbiotic.R.drawable.ic_bubble_black_24dp)
+        setSmallIcon(R.drawable.ic_bubble_black_24dp)
         setContentTitle("${reminder.label} fermentation for ${fermentation.title} is done.")
         priority = NotificationCompat.PRIORITY_DEFAULT
         setContentIntent(pendingIntent)
