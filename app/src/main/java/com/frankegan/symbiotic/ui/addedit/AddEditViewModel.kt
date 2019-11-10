@@ -1,6 +1,7 @@
 package com.frankegan.symbiotic.ui.addedit
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -122,10 +123,10 @@ class AddEditViewModel @Inject constructor(
         _ingredientData.value = ingredientData.value!! + ingredient
     }
 
-    fun addImage(filename: String, caption: String = "") {
+    fun addImage(fileUri: Uri?, caption: String = "") {
         val fermentationId = fermentationData.value?.id ?: return
         val image = Image(
-            filename = filename,
+            fileUri = fileUri?.toString() ?: return,
             caption = caption,
             fermentation = fermentationId
         )
@@ -141,7 +142,7 @@ class AddEditViewModel @Inject constructor(
      */
     fun addCaption(filename: String, caption: String) {
         _imageData.value = imageData.value!!.map {
-            if (it.filename == filename) it.copy(caption = caption) else it
+            if (it.fileUri == filename) it.copy(caption = caption) else it
         }
     }
 
@@ -158,7 +159,7 @@ class AddEditViewModel @Inject constructor(
         val fermentation = fermentationData.value ?: return@launchSilent
         NotificationWorker.cancelWork(app, fermentation)
         symbioticRepo.deleteFermentation(fermentation.id)
-        imageData.value?.forEach { symbioticRepo.deleteImage(it.filename) }
+        imageData.value?.forEach { symbioticRepo.deleteImage(it.fileUri) }
         ingredientData.value?.forEach { symbioticRepo.deleteIngredient(it.id) }
         symbioticRepo.deleteNote(noteData.value?.id ?: return@launchSilent)
     }

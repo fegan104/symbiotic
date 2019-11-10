@@ -1,5 +1,6 @@
 package com.frankegan.symbiotic.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,42 +10,44 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.frankegan.symbiotic.R
+import com.frankegan.symbiotic.di.VMInjectionFactory
 import com.frankegan.symbiotic.di.injector
 import kotlinx.android.synthetic.main.home_fragment.*
+import javax.inject.Inject
 
 class HomeFragment : Fragment() {
-    private lateinit var adapter: FermentationAdapter
 
-    /**
-     * We need to inject a ViewModelFactory to build our ViewModels with custom parameters.
-     */
-    private val factory by lazy { injector.homeViewModelFactory() }
+    @Inject
+    lateinit var adapter: FermentationAdapter
+
+    @Inject
+    lateinit var factory: VMInjectionFactory<HomeViewModel>
+
     private val viewModel by viewModels<HomeViewModel>(
         factoryProducer = { factory }
     )
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        injector.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = FermentationAdapter {
+        adapter.onItemClick = {
             findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))
         }
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /////////////////
-        //FAB click listener
-        /////////////////
         fab.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.addEditAction())
         }
-        /////////////////
-        //Observe Fermentation Data
-        /////////////////
-        recycler_view.adapter = adapter
+        recycler_view.adapter = this.adapter
         viewModel.fermentationData().observe(this) {
             adapter.updateItems(it)
         }

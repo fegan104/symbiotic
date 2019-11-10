@@ -34,8 +34,8 @@ interface ImageDao {
     @Query("SELECT * FROM image WHERE fermentation = :fermentationId")
     suspend fun selectByFermentation(fermentationId: String): List<Image>
 
-    @Query("DELETE FROM image WHERE filename = :filename")
-    suspend fun delete(filename: String): Int
+    @Query("DELETE FROM image WHERE fileUri = :fileUri")
+    suspend fun delete(fileUri: String): Int
 }
 
 @Dao

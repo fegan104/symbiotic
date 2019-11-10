@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Ingredient
+import com.frankegan.symbiotic.di.VMInjectionFactory
 import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.ingredientInputDialog
 import com.stepstone.stepper.Step
 import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.ingredients_fragment.*
+import javax.inject.Inject
 
 const val KEY_INGREDIENTS = "INGREDIENTS"
 
@@ -22,13 +24,20 @@ const val KEY_INGREDIENTS = "INGREDIENTS"
  * This holds the list of ingredients in our kombucha.
  */
 class IngredientsFragment : Fragment(), Step {
-    private val factory by lazy { injector.addEditViewModelFactory() }
-    private val viewModel by viewModels<AddEditViewModel>(
-        ownerProducer = ::requireActivity,
+    @Inject
+    lateinit var adapter: IngredientsAdapter
+
+    @Inject
+    lateinit var factory: VMInjectionFactory<AddEditViewModel>
+
+    private val viewModel by activityViewModels<AddEditViewModel>(
         factoryProducer = { factory }
     )
 
-    private lateinit var adapter: IngredientsAdapter
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injector.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,12 +52,13 @@ class IngredientsFragment : Fragment(), Step {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        list_view.adapter = IngredientsAdapter(
-            createNewItem = { showInputDialog() },
+        list_view.adapter = this.adapter.apply {
+            createNewItem = { showInputDialog() }
             deleteItem = { viewModel.deleteIngredient(it) }
-        ).also { adapter = it }
+        }
+
         viewModel.ingredientData.observe(this) {
-            adapter.updateData(it)
+            this.adapter.updateData(it)
         }
     }
 
