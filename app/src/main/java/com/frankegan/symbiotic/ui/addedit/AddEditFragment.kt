@@ -4,14 +4,16 @@ package com.frankegan.symbiotic.ui.addedit
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.frankegan.symbiotic.R
+import com.frankegan.symbiotic.di.VMInjectionFactory
 import com.frankegan.symbiotic.di.injector
 import com.stepstone.stepper.StepperLayout
 import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.add_edit_fragment.*
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -19,18 +21,18 @@ import kotlinx.android.synthetic.main.add_edit_fragment.*
  */
 class AddEditFragment : Fragment(), StepperLayout.StepperListener {
 
-    /**
-     * Safe args from Navigation Manager.
-     */
     private val safeArgs by navArgs<AddEditFragmentArgs>()
-    private val factory by lazy { injector.addEditViewModelFactory() }
-    private val viewModel by viewModels<AddEditViewModel>(
-        ownerProducer = ::requireActivity,
+
+    @Inject
+    lateinit var factory: VMInjectionFactory<AddEditViewModel>
+
+    private val viewModel by activityViewModels<AddEditViewModel>(
         factoryProducer = { factory }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        injector.inject(this)
         viewModel.loadFermentationData(safeArgs.fermentationId)
     }
 

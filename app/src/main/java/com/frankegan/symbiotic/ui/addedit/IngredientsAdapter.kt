@@ -8,16 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Ingredient
+import javax.inject.Inject
 
 private const val CREATE_ITEM = 0
 private const val DEFAULT_ITEM = 1
 
-class IngredientsAdapter(
-    private val createNewItem: () -> Unit,
-    private val deleteItem: (Ingredient) -> Unit
-) : RecyclerView.Adapter<IngredientViewHolder>() {
+class IngredientsAdapter @Inject constructor() : RecyclerView.Adapter<IngredientViewHolder>() {
     //Always pad this list with a null to represent the add list item view
     private val items = mutableListOf<Ingredient?>(null)
+    var createNewItem: () -> Unit = {}
+    var deleteItem: (Ingredient) -> Unit = {}
 
     override fun getItemViewType(position: Int) = when {
         items.isEmpty() -> CREATE_ITEM

@@ -6,23 +6,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.api.load
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.data.Image
-import java.io.File
 import javax.inject.Inject
 
-class GalleryAdapter @Inject constructor(val listener: (Image) -> Unit) :
-    RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter @Inject constructor() : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
+    var onItemClick: (Image) -> Unit = {}
     val items = mutableListOf<Image>()
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: Image) {
             view.findViewById<TextView>(R.id.caption_text).text = item.caption
             view.findViewById<ImageView>(R.id.image_view).apply {
-                Glide.with(view).load(File(item.filename)).into(this)
-                setOnClickListener { listener(item) }
+                load(item.fileUri)
+                setOnClickListener { onItemClick(item) }
             }
         }
     }

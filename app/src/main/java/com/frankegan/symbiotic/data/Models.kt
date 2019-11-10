@@ -24,7 +24,7 @@ data class Fermentation(
 @Entity
 @Parcelize
 data class Image(
-    @PrimaryKey val filename: String,
+    @PrimaryKey val fileUri: String,
     val caption: String,
     @ForeignKey(
         entity = Fermentation::class,
