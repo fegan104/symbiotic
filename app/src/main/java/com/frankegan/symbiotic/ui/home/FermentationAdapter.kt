@@ -28,6 +28,7 @@ class FermentationAdapter @Inject constructor() :
             view.findViewById<TextView>(R.id.item_title_text).text = item.title
             view.findViewById<ImageView>(R.id.item_thumbnail)
                 .setOnClickListener { onItemClick(item) }
+
             val total = item.startDate.until(item.secondEndDate, ChronoUnit.SECONDS).toDouble()
             val current = item.startDate.until(LocalDateTime.now(), ChronoUnit.SECONDS).toDouble()
             view.findViewById<ProgressBar>(R.id.item_progress).progress =

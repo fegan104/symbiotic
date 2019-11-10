@@ -1,6 +1,7 @@
 package com.frankegan.symbiotic.di
 
 import com.frankegan.symbiotic.data.SymbioticRepository
+import com.frankegan.symbiotic.notifications.NotificationWorker
 import com.frankegan.symbiotic.ui.addedit.AddEditFragment
 import com.frankegan.symbiotic.ui.addedit.DetailsFragment
 import com.frankegan.symbiotic.ui.addedit.GalleryFragment
@@ -24,4 +25,6 @@ interface SymbioticComponent {
     fun inject(fragment: DetailsFragment)
 
     fun inject(fragment: IngredientsFragment)
+
+    fun inject(worker: NotificationWorker)
 }
