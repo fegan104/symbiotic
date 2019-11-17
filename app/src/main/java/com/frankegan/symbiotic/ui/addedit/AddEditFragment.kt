@@ -15,10 +15,7 @@ import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.add_edit_fragment.*
 import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass.
- *
- */
+
 class AddEditFragment : Fragment(), StepperLayout.StepperListener {
 
     private val safeArgs by navArgs<AddEditFragmentArgs>()

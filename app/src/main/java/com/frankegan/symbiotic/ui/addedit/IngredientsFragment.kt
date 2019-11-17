@@ -52,8 +52,9 @@ class IngredientsFragment : Fragment(), Step {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        new_ingredient.setOnClickListener { showInputDialog() }
+
         list_view.adapter = this.adapter.apply {
-            createNewItem = { showInputDialog() }
             deleteItem = { viewModel.deleteIngredient(it) }
         }
 
@@ -69,7 +70,11 @@ class IngredientsFragment : Fragment(), Step {
 
     private fun showInputDialog() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         val ingredients = ingredientInputDialog()
-        viewModel.addIngredient(ingredients.first, ingredients.second, ingredients.third)
+        viewModel.addIngredient(
+            name = ingredients.first,
+            quantity = ingredients.second,
+            unit = ingredients.third
+        )
     }
 
     override fun onSelected() = Unit

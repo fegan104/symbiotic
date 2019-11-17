@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="white">#fff</color>
-    <color name="gray_text_on_light">#666</color>
+    <color name="symbiotic_teal">#5CCAA5</color>
+    <color name="symbiotic_teal_dark">#209976</color>
+    <color name="symbiotic_yellow">#FEE137</color>
+    <color name="symbiotic_yellow_dark">#c7b000</color>
+
+    <color name="colorPrimary">@color/symbiotic_teal</color>
+    <color name="colorPrimaryDark">@color/symbiotic_teal_dark</color>
+    <color name="colorAccent">@color/symbiotic_yellow</color>
+
+    <color name="subtleText">#666</color>
 </resources>

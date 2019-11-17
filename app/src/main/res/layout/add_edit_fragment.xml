@@ -13,11 +13,13 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:ms_bottomNavigationBackground="?attr/colorSurface"
             app:ms_backButtonBackground="@android:color/transparent"
-            app:ms_backButtonColor="@color/colorPrimary"
-            app:ms_completeButtonColor="@color/colorPrimary"
+            app:ms_backButtonColor="?attr/colorPrimary"
+            app:ms_completeButtonColor="?attr/colorPrimary"
             app:ms_completeButtonText="@string/save"
-            app:ms_nextButtonColor="@color/colorPrimary"
+            app:ms_activeStepColor="?attr/colorPrimary"
+            app:ms_nextButtonColor="?attr/colorPrimary"
             app:ms_stepperType="progress_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

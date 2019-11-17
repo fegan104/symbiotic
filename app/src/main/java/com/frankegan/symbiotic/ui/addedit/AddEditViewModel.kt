@@ -120,7 +120,7 @@ class AddEditViewModel @Inject constructor(
             unit = unit,
             fermentation = fermentationId
         )
-        _ingredientData.value = ingredientData.value!! + ingredient
+        _ingredientData.value = listOf(ingredient) + ingredientData.value!!
     }
 
     fun addImage(fileUri: Uri?, caption: String = "") {
