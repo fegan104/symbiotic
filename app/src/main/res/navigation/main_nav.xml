@@ -15,7 +15,9 @@
                 app:destination="@id/add_edit_fragment">
             <argument
                     android:name="fermentationId"
-                    android:defaultValue="@null" />
+                    android:defaultValue="@null"
+                    app:nullable="true"
+                    app:argType="string" />
         </action>
     </fragment>
 

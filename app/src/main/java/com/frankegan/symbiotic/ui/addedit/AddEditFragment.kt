@@ -2,6 +2,7 @@ package com.frankegan.symbiotic.ui.addedit
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -30,6 +31,7 @@ class AddEditFragment : Fragment(), StepperLayout.StepperListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
+        Log.d("AddEditFragment", safeArgs.fermentationId.toString())
         viewModel.loadFermentationData(safeArgs.fermentationId)
     }
 

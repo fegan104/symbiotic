@@ -36,6 +36,7 @@ class IngredientsAdapter @Inject constructor() :
         items.apply {
             clear()
             addAll(new)
+            reverse()
         }
         notifyDataSetChanged()
     }

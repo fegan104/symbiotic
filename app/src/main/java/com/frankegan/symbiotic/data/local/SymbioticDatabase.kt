@@ -9,7 +9,7 @@ import com.frankegan.symbiotic.data.Ingredient
 import com.frankegan.symbiotic.data.Note
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         Fermentation::class,
         Ingredient::class,
