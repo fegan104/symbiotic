@@ -3,8 +3,8 @@ package com.frankegan.symbiotic.di
 import android.app.Application
 import androidx.room.Room
 import com.frankegan.symbiotic.data.SymbioticRepository
-import com.frankegan.symbiotic.data.local.LocalDataSource
 import com.frankegan.symbiotic.data.local.SymbioticDatabase
+import com.frankegan.symbiotic.data.local.SymbioticLocalDataSource
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -21,13 +21,13 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataSource(database: SymbioticDatabase): LocalDataSource {
-        return LocalDataSource(database)
+    fun provideLocalDataSource(database: SymbioticDatabase): SymbioticLocalDataSource {
+        return SymbioticLocalDataSource(database)
     }
 
     @Singleton
     @Provides
-    fun provideSymbioticRepository(localDataSource: LocalDataSource): SymbioticRepository {
+    fun provideSymbioticRepository(localDataSource: SymbioticLocalDataSource): SymbioticRepository {
         return SymbioticRepository(localDataSource)
     }
 }

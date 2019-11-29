@@ -1,12 +1,12 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="SymbioticTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-    <style name="mdtp_ActionButton.Text" parent="Widget.MaterialComponents.Button.TextButton.Dialog"/>
+    <style name="mdtp_ActionButton.Text" parent="Widget.MaterialComponents.Button.TextButton.Dialog" />
 
+    <style name="Widget.Symbiotic.IngredientText" parent="@style/Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/subtleText</item>
+    </style>
+
+    <style name="Widget.Symbiotic.IngredientImage" parent="@style/Widget.MaterialComponents.TextView">
+        <item name="android:tint">@color/subtleText</item>
+    </style>
 </resources>

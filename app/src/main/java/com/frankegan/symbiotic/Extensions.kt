@@ -3,13 +3,17 @@ package com.frankegan.symbiotic
 import android.content.DialogInterface
 import android.text.InputType
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.ingredient_input_dialog.view.*
@@ -54,7 +58,7 @@ inline fun Fragment.openTimePicker(
         hourOfDay,
         minute,
         is24HourMode
-    ).show(requireFragmentManager(), "TimePickerFragment")
+    ).show(childFragmentManager, "TimePickerFragment")
 }
 
 inline fun Fragment.openDatePicker(
@@ -145,3 +149,12 @@ inline fun AlertDialog.Builder.negativeButton(
     @StringRes text: Int,
     crossinline onClick: (Pair<DialogInterface, Int>) -> Unit
 ): AlertDialog.Builder = this.setNegativeButton(text) { dialog, which -> onClick(dialog to which) }
+
+fun ChipGroup.addChipsFromText(@LayoutRes chipLayout: Int, text: List<String>) {
+    this.removeAllViews()
+    text.forEach {
+        val chip = View.inflate(this.context, chipLayout, null) as Chip
+        chip.text = it
+        this.addView(chip)
+    }
+}

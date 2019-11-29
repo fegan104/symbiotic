@@ -20,16 +20,13 @@ interface FermentationDao {
 
     @Query("DELETE FROM fermentation WHERE id = :id")
     suspend fun delete(id: String): Int
-
-    @Update
-    suspend fun update(fermentation: Fermentation): Int
 }
 
 @Dao
 interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(image: Image): Long
+    suspend fun insertAll(image: List<Image>): List<Long>
 
     @Query("SELECT * FROM image WHERE fermentation = :fermentationId")
     suspend fun selectByFermentation(fermentationId: String): List<Image>
@@ -59,8 +56,8 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note): Long
 
-    @Query("SELECT * FROM note WHERE fermentation = :fermentationId")
-    suspend fun selectByFermentation(fermentationId: String): List<Note>
+    @Query("SELECT * FROM note WHERE fermentation = :fermentationId LIMIT 1")
+    suspend fun selectByFermentation(fermentationId: String): Note
 
     @Query("DELETE FROM note WHERE id = :id")
     suspend fun delete(id: String): Int

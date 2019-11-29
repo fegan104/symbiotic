@@ -37,13 +37,13 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter.onItemClick = {
-            findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))
-        }
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        adapter.onItemClick = {
+            findNavController().navigate(HomeFragmentDirections.addEditAction(fermentationId = it.id))
+        }
         fab.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.addEditAction())
         }

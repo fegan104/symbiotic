@@ -9,13 +9,13 @@
 
     <ImageView
             android:id="@+id/remove_button"
+            style="@style/Widget.Symbiotic.IngredientImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/delete"
-            android:tint="@color/gray_text_on_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -23,6 +23,7 @@
 
     <TextView
             android:id="@+id/name_text"
+            style="@style/Widget.Symbiotic.IngredientText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

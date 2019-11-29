@@ -2,11 +2,13 @@ package com.frankegan.symbiotic.notifications
 
 import android.content.Context
 import androidx.work.*
-import com.frankegan.symbiotic.SymbioticApp
 import com.frankegan.symbiotic.data.Fermentation
+import com.frankegan.symbiotic.data.SymbioticRepository
+import com.frankegan.symbiotic.di.injector
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 private typealias Success<T> = com.frankegan.symbiotic.data.Result.Success<T>
 private typealias Error = com.frankegan.symbiotic.data.Result.Error
@@ -21,9 +23,16 @@ private const val REMINDER_TYPE = "REMINDER_TYPE"
 class NotificationWorker(val context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
-    private val fermentationId = params.inputData.getString(FERMENTATION_ID)!!
-    private val reminderType = params.inputData.getString(REMINDER_TYPE)!!
-    private val symbioticRepository by lazy { (applicationContext as SymbioticApp).component.symbioticRepository() }
+    init {
+        injector.inject(this)
+    }
+
+    @Inject
+    lateinit var symbioticRepository: SymbioticRepository
+    private val fermentationId = params.inputData.getString(FERMENTATION_ID)
+        ?: throw IllegalArgumentException("Missing fermentationId")
+    private val reminderType = params.inputData.getString(REMINDER_TYPE)
+        ?: throw IllegalArgumentException("Missing reminderType")
 
     override suspend fun doWork(): Result {
         val fermentation = when (val result = symbioticRepository.getFermentation(fermentationId)) {

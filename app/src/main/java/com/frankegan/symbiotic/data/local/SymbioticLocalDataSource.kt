@@ -2,7 +2,7 @@ package com.frankegan.symbiotic.data.local
 
 import com.frankegan.symbiotic.data.*
 
-class LocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSource {
+class SymbioticLocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSource {
 
     override suspend fun getFermentation(id: String) = try {
         val result = database.fermentationDao().selectById(id)
@@ -11,18 +11,24 @@ class LocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSo
         Result.Error(exception)
     }
 
-
-    override suspend fun createFermentation(fermentation: Fermentation) = try {
-        val count = database.fermentationDao().insert(fermentation)
-        if (count <= 0) throw (LocalDataNotFoundException())
-        Result.Success(fermentation)
-    } catch (exception: Exception) {
-        Result.Error(exception)
-    }
-
-    override suspend fun updateFermentation(fermentation: Fermentation) = try {
-        val count = database.fermentationDao().update(fermentation)
-        if (count <= 0) throw (LocalDataNotFoundException())
+    override suspend fun saveFermentation(
+        fermentation: Fermentation,
+        ingredients: List<Ingredient>,
+        images: List<Image>,
+        note: Note?
+    ) = try {
+        database.apply {
+            if (fermentationDao().insert(fermentation) <= 0) throw (LocalDataNotFoundException())
+            note?.let {
+                if (noteDao().insert(it) <= 0) throw (LocalDataNotFoundException())
+            }
+            if (ingredients.isNotEmpty() && ingredientDao().insertAll(ingredients).any { it <= 0 }) {
+                throw (LocalDataNotFoundException())
+            }
+            if (images.isNotEmpty() && imageDao().insertAll(images).any { it <= 0 }) {
+                throw (LocalDataNotFoundException())
+            }
+        }
         Result.Success(fermentation)
     } catch (exception: Exception) {
         Result.Error(exception)
@@ -50,14 +56,6 @@ class LocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSo
         Result.Error(exception)
     }
 
-    override suspend fun createIngredients(ingredients: List<Ingredient>) = try {
-        val count = database.ingredientDao().insertAll(ingredients)
-        if (count.isEmpty()) throw (LocalDataNotFoundException())
-        Result.Success(ingredients)
-    } catch (exception: Exception) {
-        Result.Error(exception)
-    }
-
     override suspend fun updateIngredient(ingredient: Ingredient) = try {
         val count = database.ingredientDao().update(ingredient)
         if (count <= 0) throw (LocalDataNotFoundException())
@@ -70,14 +68,6 @@ class LocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSo
         val count = database.ingredientDao().delete(id)
         if (count <= 0) throw (LocalDataNotFoundException())
         Result.Success(id)
-    } catch (exception: Exception) {
-        Result.Error(exception)
-    }
-
-    override suspend fun createImage(image: Image) = try {
-        val count = database.imageDao().insert(image)
-        if (count <= 0) throw (LocalDataNotFoundException())
-        Result.Success(image)
     } catch (exception: Exception) {
         Result.Error(exception)
     }
@@ -98,16 +88,8 @@ class LocalDataSource(private val database: SymbioticDatabase) : SymbioticDataSo
     }
 
     override suspend fun getNote(fermentationId: String) = try {
-        val result = database.noteDao().selectByFermentation(fermentationId).first()
+        val result = database.noteDao().selectByFermentation(fermentationId)
         Result.Success(result)
-    } catch (exception: Exception) {
-        Result.Error(exception)
-    }
-
-    override suspend fun createNote(note: Note) = try {
-        val count = database.noteDao().insert(note)
-        if (count <= 0) throw (LocalDataNotFoundException())
-        Result.Success(note)
     } catch (exception: Exception) {
         Result.Error(exception)
     }
