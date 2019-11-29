@@ -37,28 +37,27 @@ class AddEditViewModel @Inject constructor(
     private val symbioticRepo: SymbioticRepository
 ) : AndroidViewModel(app) {
 
-    private val _uiModel = MutableLiveData<AddEditUiModel>(initState())
+    private val uiModel = MutableLiveData<AddEditUiModel>(initState())
 
-    val fermentationData: LiveData<Fermentation?> = _uiModel.map { it.fermentation }
+    val fermentationData: LiveData<Fermentation?> = uiModel.map { it.fermentation }
 
-    val ingredientData: LiveData<List<Ingredient>> = _uiModel.map { it.ingredients }
+    val ingredientData: LiveData<List<Ingredient>> = uiModel.map { it.ingredients }
 
-    val imageData: LiveData<List<Image>> = _uiModel.map { it.images }
+    val imageData: LiveData<List<Image>> = uiModel.map { it.images }
 
-    val noteData: LiveData<Note?> = _uiModel.map { it.note }
+    val noteData: LiveData<Note?> = uiModel.map { it.note }
 
     fun loadFermentationData(fermentationId: String?) = viewModelScope.launch {
         if (fermentationId == null) {
-            _uiModel.value = initState()
+            uiModel.value = initState()
         }
-        val currentSate = _uiModel.value!!
+        val currentSate = uiModel.value!!
         val id = fermentationId ?: currentSate.fermentation.id
 
         val fermentation = when (val result = symbioticRepo.getFermentation(id)) {
             is Result.Success -> result.data
             is Result.Error -> currentSate.fermentation
         }
-        Log.d("loadFermentationData", fermentation.toString())
 
         val ingredients = when (val result = symbioticRepo.getIngredients(id)) {
             is Result.Success -> result.data
@@ -74,7 +73,7 @@ class AddEditViewModel @Inject constructor(
             is Result.Error -> currentSate.note
         }
 
-        _uiModel.value = currentSate.copy(
+        uiModel.value = currentSate.copy(
             fermentation = fermentation,
             ingredients = ingredients,
             images = images,
@@ -87,7 +86,7 @@ class AddEditViewModel @Inject constructor(
      * Persist data and schedule reminder notifications for the new fermentation.
      */
     fun saveFermentation() = GlobalScope.launchSilent {
-        val currentState = _uiModel.value ?: return@launchSilent
+        val currentState = uiModel.value ?: return@launchSilent
         //saveFermentation will insert or update appropriately
         val result = symbioticRepo.saveFermentation(
             currentState.fermentation,
@@ -107,7 +106,7 @@ class AddEditViewModel @Inject constructor(
         first: String = "",
         second: String = ""
     ) {
-        val currentState = _uiModel.value ?: return
+        val currentState = uiModel.value ?: return
         val currentFermentation = currentState.fermentation
 
         val nextName = if (name.isNotBlank()) name else currentFermentation.title
@@ -135,11 +134,11 @@ class AddEditViewModel @Inject constructor(
             secondEndDate = nextSecondEnd
         )
 
-        _uiModel.value = currentState.copy(fermentation = nextFermentation)
+        uiModel.value = currentState.copy(fermentation = nextFermentation)
     }
 
     fun addIngredient(name: String, quantity: Double, unit: String) {
-        val currentState = _uiModel.value ?: return
+        val currentState = uiModel.value ?: return
 
         val next = Ingredient(
             name = name,
@@ -147,20 +146,20 @@ class AddEditViewModel @Inject constructor(
             unit = unit,
             fermentation = currentState.fermentation.id
         )
-        _uiModel.value = currentState.copy(
+        uiModel.value = currentState.copy(
             ingredients = currentState.ingredients + next
         )
     }
 
     fun addImage(fileUri: Uri?, caption: String = "") {
-        val currentState = _uiModel.value ?: return
+        val currentState = uiModel.value ?: return
 
         val next = Image(
             fileUri = fileUri?.toString() ?: return,
             caption = caption,
             fermentation = currentState.fermentation.id
         )
-        _uiModel.value = currentState.copy(
+        uiModel.value = currentState.copy(
             images = currentState.images + next
         )
     }
@@ -173,9 +172,9 @@ class AddEditViewModel @Inject constructor(
      * @param caption The new caption to add to an [Image] record.
      */
     fun addCaption(filename: String, caption: String) {
-        val currentState = _uiModel.value ?: return
+        val currentState = uiModel.value ?: return
 
-        _uiModel.value = currentState.copy(
+        uiModel.value = currentState.copy(
             images = currentState.images.map {
                 if (it.fileUri == filename) it.copy(caption = caption) else it
             }
@@ -183,28 +182,28 @@ class AddEditViewModel @Inject constructor(
     }
 
     fun addNote(content: String) {
-        val currentState = _uiModel.value ?: return
+        val currentState = uiModel.value ?: return
 
         val next = Note(
             content = content,
             fermentation = currentState.fermentation.id
         )
-        _uiModel.value = currentState.copy(note = next)
+        uiModel.value = currentState.copy(note = next)
     }
 
     /**
      * Removes the fermentation and related data and cancels any pending reminders about the fermentation.
      */
     fun deleteFermentation() = viewModelScope.launchSilent {
-        val currentState = _uiModel.value ?: return@launchSilent
+        val currentState = uiModel.value ?: return@launchSilent
         NotificationWorker.cancelWork(app, currentState.fermentation)
         //this will cascade delete all children
         symbioticRepo.deleteFermentation(currentState.fermentation.id)
     }
 
     fun deleteIngredient(ingredient: Ingredient) = viewModelScope.launchSilent {
-        val currentState = _uiModel.value ?: return@launchSilent
-        _uiModel.value = currentState.copy(
+        val currentState = uiModel.value ?: return@launchSilent
+        uiModel.value = currentState.copy(
             ingredients = currentState.ingredients.filter { it != ingredient }
         )
     }
