@@ -23,6 +23,7 @@ data class AddEditUiModel(
 private fun initState() = AddEditUiModel(
     fermentation = Fermentation(
         title = "",
+        headerUrl = "",
         startDate = LocalDateTime.now(),
         firstEndDate = LocalDateTime.now().plusDays(10),
         secondEndDate = LocalDateTime.now().plusDays(14)
@@ -164,23 +165,6 @@ class AddEditViewModel @Inject constructor(
         )
     }
 
-    /**
-     * Change the caption of the selected [Image]. This is done in memory with the understanding it will be persisted
-     * upon the user selecting to save the fermentation later.
-     *
-     * @param filename The key for updating an [Image] record.
-     * @param caption The new caption to add to an [Image] record.
-     */
-    fun addCaption(filename: String, caption: String) {
-        val currentState = uiModel.value ?: return
-
-        uiModel.value = currentState.copy(
-            images = currentState.images.map {
-                if (it.fileUri == filename) it.copy(caption = caption) else it
-            }
-        )
-    }
-
     fun addNote(content: String) {
         val currentState = uiModel.value ?: return
 
@@ -205,6 +189,23 @@ class AddEditViewModel @Inject constructor(
         val currentState = uiModel.value ?: return@launchSilent
         uiModel.value = currentState.copy(
             ingredients = currentState.ingredients.filter { it != ingredient }
+        )
+    }
+
+    fun addHeaderImage(url: String) {
+        val currentState = uiModel.value ?: return
+        uiModel.value =
+            currentState.copy(fermentation = currentState.fermentation.copy(headerUrl = url))
+    }
+
+    fun headerImages() = liveData {
+        emit(
+            listOf(
+                "https://images.unsplash.com/photo-1536788567643-8c2368376526?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=668&q=80",
+                "https://images.unsplash.com/photo-1498557850523-fd3d118b962e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80",
+                "https://images.unsplash.com/photo-1454944338482-a69bb95894af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1652&q=80",
+                "https://images.unsplash.com/photo-1546548970-71785318a17b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2734&q=80"
+            )
         )
     }
 }

@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'io.fabric'
 
 androidExtensions {
     experimental = true
@@ -42,13 +43,13 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.core:core:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha03'
+    implementation 'androidx.fragment:fragment-ktx:1.2.0-rc02'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.dagger:dagger:2.17'
     kapt 'com.google.dagger:dagger-compiler:2.17'
     //Material Components
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'com.google.android.material:material:1.2.0-alpha02'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     //Architecture Components
@@ -57,9 +58,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc02"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation "androidx.work:work-runtime-ktx:2.2.0"
-    implementation "androidx.room:room-ktx:2.2.1"
-    kapt "androidx.room:room-compiler:2.2.1"
-    implementation "androidx.room:room-runtime:2.2.1"
+    implementation "androidx.room:room-ktx:2.2.2"
+    kapt "androidx.room:room-compiler:2.2.2"
+    implementation "androidx.room:room-runtime:2.2.2"
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
     //Navigation
@@ -73,9 +74,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.stepstone.stepper:material-stepper:4.3.1'
+    //Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
     //Testing
     testImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
+// Keep at the bottom of the file
+apply plugin: 'com.google.gms.google-services'

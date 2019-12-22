@@ -14,7 +14,7 @@ class AddEditStepperAdapter @Inject constructor(
     override fun createStep(position: Int): Step = when (position) {
         0 -> DetailsFragment.newInstance()
         1 -> IngredientsFragment.newInstance()
-        2 -> GalleryFragment.newInstance()
+        2 -> HeaderGalleryFragment.newInstance()
         else -> throw IllegalArgumentException("Invalid position: $position")
     }
 

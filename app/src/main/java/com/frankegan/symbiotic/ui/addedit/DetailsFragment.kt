@@ -1,9 +1,7 @@
 package com.frankegan.symbiotic.ui.addedit
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,11 +22,9 @@ const val DETAIL_DATE_FORMAT = "EEE MMM. dd, yyyy, HH:mm"
 private const val MISSING_NAME = "MISSING_NAME"
 
 /**
- * A simple [Fragment] subclass.
- *
  * This contains the fermentations name, date and time for notifications and extra notes about the fermentation.
  */
-class DetailsFragment : Fragment(), Step {
+class DetailsFragment : Fragment(R.layout.details_fragment), Step {
     @Inject
     lateinit var factory: VMInjectionFactory<AddEditViewModel>
     private val viewModel by activityViewModels<AddEditViewModel>(
@@ -40,19 +36,12 @@ class DetailsFragment : Fragment(), Step {
         injector.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.details_fragment, container, false)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ///////////////////////////
-        //Observe ViewModel LiveData
-        ///////////////////////////
+
         viewModel.fermentationData.observe(this) {
             it ?: return@observe
+            //this check prevents infinite livedata/observer loop
             if (name_input?.text?.isBlank() == true || (name_input?.text.toString() != it.title)) {
                 name_input.setText(it.title)
                 start_date_input.setText(it.startDate.format(DETAIL_DATE_FORMAT))
@@ -74,9 +63,6 @@ class DetailsFragment : Fragment(), Step {
             notes_input.setText(it.content)
         }
 
-        ///////////////////////////
-        //Save view state in ViewModel
-        ///////////////////////////
         name_input.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) viewModel.addDetails(name = name_input.text.toString())
         }

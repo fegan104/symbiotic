@@ -9,4 +9,14 @@
     <style name="Widget.Symbiotic.IngredientImage" parent="@style/Widget.MaterialComponents.TextView">
         <item name="android:tint">@color/subtleText</item>
     </style>
+
+    <style name="Widget.Symbiotic.Stepper" parent="@style/Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:tint">@color/subtleText</item>
+        <item name="ms_activeStepColor">?attr/colorPrimary</item>
+        <item name="ms_backButtonBackground">@android:color/transparent</item>
+        <item name="ms_backButtonColor">?attr/colorPrimary</item>
+        <item name="ms_bottomNavigationBackground">?attr/colorSurface</item>
+        <item name="ms_completeButtonColor">?attr/colorPrimary</item>
+        <item name="ms_nextButtonColor">?attr/colorPrimary</item>
+    </style>
 </resources>

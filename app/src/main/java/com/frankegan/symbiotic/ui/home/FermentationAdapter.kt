@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.frankegan.symbiotic.R
 import com.frankegan.symbiotic.addChipsFromText
 import com.frankegan.symbiotic.data.Fermentation
@@ -38,6 +39,7 @@ class FermentationAdapter @Inject constructor() :
             title.text = item.title
             subtitle.text = context.getString(R.string.done_on, item.secondEndDate.format("MMM dd"))
             image.setOnClickListener { onItemClick(item) }
+            image.load(item.headerUrl)
 
             val total = item.startDate.until(item.secondEndDate, ChronoUnit.SECONDS).toDouble()
             val current = item.startDate.until(LocalDateTime.now(), ChronoUnit.SECONDS).toDouble()

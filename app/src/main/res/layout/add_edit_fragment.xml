@@ -6,20 +6,15 @@
 
     <com.stepstone.stepper.StepperLayout
             android:id="@+id/stepper_layout"
+            style="@style/Widget.Symbiotic.Stepper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:ms_bottomNavigationBackground="?attr/colorSurface"
-            app:ms_backButtonBackground="@android:color/transparent"
-            app:ms_backButtonColor="?attr/colorPrimary"
-            app:ms_completeButtonColor="?attr/colorPrimary"
-            app:ms_completeButtonText="@string/save"
-            app:ms_activeStepColor="?attr/colorPrimary"
-            app:ms_nextButtonColor="?attr/colorPrimary"
-            app:ms_stepperType="progress_bar" />
+            app:ms_completeButtonText="@string/save" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

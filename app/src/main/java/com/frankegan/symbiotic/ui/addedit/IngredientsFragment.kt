@@ -14,7 +14,6 @@ import com.frankegan.symbiotic.di.VMInjectionFactory
 import com.frankegan.symbiotic.di.injector
 import com.frankegan.symbiotic.ingredientInputDialog
 import com.stepstone.stepper.Step
-import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.ingredients_fragment.*
 import javax.inject.Inject
 
@@ -23,7 +22,7 @@ const val KEY_INGREDIENTS = "INGREDIENTS"
 /**
  * This holds the list of ingredients in our kombucha.
  */
-class IngredientsFragment : Fragment(), Step {
+class IngredientsFragment : Fragment(), Step by DefaultStepper {
     @Inject
     lateinit var adapter: IngredientsAdapter
 
@@ -76,12 +75,6 @@ class IngredientsFragment : Fragment(), Step {
             unit = ingredients.third
         )
     }
-
-    override fun onSelected() = Unit
-
-    override fun verifyStep(): VerificationError? = null
-
-    override fun onError(error: VerificationError) = Unit
 
     companion object {
         /**

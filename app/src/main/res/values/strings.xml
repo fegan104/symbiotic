@@ -11,6 +11,7 @@
     <string name="please_add_name">Please add a name for the brew</string>
     <string name="write_permission_rationale">Snap A Photo need permission to save photos</string>
     <string name="done_on">Done on %s</string>
+    <string name="pick_a_header_image_for_your_fermentation">Pick a header image for your fermentation</string>
 
 
     <string-array name="add_edit">

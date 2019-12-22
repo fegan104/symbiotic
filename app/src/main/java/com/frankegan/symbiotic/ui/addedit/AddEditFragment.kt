@@ -2,8 +2,10 @@ package com.frankegan.symbiotic.ui.addedit
 
 
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,7 +19,7 @@ import kotlinx.android.synthetic.main.add_edit_fragment.*
 import javax.inject.Inject
 
 
-class AddEditFragment : Fragment(), StepperLayout.StepperListener {
+class AddEditFragment : Fragment(R.layout.add_edit_fragment), StepperLayout.StepperListener {
 
     private val safeArgs by navArgs<AddEditFragmentArgs>()
 
@@ -31,20 +33,9 @@ class AddEditFragment : Fragment(), StepperLayout.StepperListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector.inject(this)
-        Log.d("AddEditFragment", safeArgs.fermentationId.toString())
+        setHasOptionsMenu(true)
         viewModel.loadFermentationData(safeArgs.fermentationId)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.add_edit_fragment, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         /////////////////
         //Setup Tabs and ViewPager

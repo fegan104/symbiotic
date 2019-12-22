@@ -16,7 +16,9 @@ class DataModule {
     @Singleton
     @Provides
     fun provideDatabase(app: Application): SymbioticDatabase {
-        return Room.databaseBuilder(app, SymbioticDatabase::class.java, "symbiotic-db").build()
+        return Room.databaseBuilder(app, SymbioticDatabase::class.java, "symbiotic-db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Singleton

@@ -15,6 +15,7 @@ data class Fermentation(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
     val title: String,
+    val headerUrl: String,
     @TypeConverters
     val startDate: LocalDateTime,
     @TypeConverters
