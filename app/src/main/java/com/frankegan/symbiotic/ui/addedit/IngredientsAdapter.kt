@@ -50,7 +50,7 @@ class IngredientsAdapter @Inject constructor() :
                     .setOnClickListener { onClick(item) }
                 view.findViewById<TextView>(R.id.name_text).text = name
                 view.findViewById<TextView>(R.id.quantityt_text).text = quantity.toString()
-                view.findViewById<TextView>(R.id.unit_text).text = unit
+                view.findViewById<TextView>(R.id.unit_text).text = unit.toString()
             }
         }
     }

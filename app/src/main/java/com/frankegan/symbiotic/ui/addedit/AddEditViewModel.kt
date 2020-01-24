@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
 import com.frankegan.symbiotic.data.*
+import com.frankegan.symbiotic.data.units.DisplayUnit
 import com.frankegan.symbiotic.launchSilent
 import com.frankegan.symbiotic.notifications.NotificationWorker
 import kotlinx.coroutines.GlobalScope
@@ -138,7 +139,7 @@ class AddEditViewModel @Inject constructor(
         uiModel.value = currentState.copy(fermentation = nextFermentation)
     }
 
-    fun addIngredient(name: String, quantity: Double, unit: String) {
+    fun addIngredient(name: String, quantity: Double, unit: DisplayUnit) {
         val currentState = uiModel.value ?: return
 
         val next = Ingredient(

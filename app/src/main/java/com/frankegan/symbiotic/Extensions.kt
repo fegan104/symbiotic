@@ -12,6 +12,10 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.frankegan.symbiotic.data.units.DisplayUnit
+import com.frankegan.symbiotic.data.units.GeneralDisplayUnit
+import com.frankegan.symbiotic.data.units.MassDisplayUnit
+import com.frankegan.symbiotic.data.units.VolumeDisplayUnit
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -45,7 +49,7 @@ fun CoroutineScope.launchSilent(
     this.launch(context, start, block)
 }
 
-fun LocalDateTime.format(format: String) = this.format(DateTimeFormatter.ofPattern(format))
+fun LocalDateTime.format(format: String): String = this.format(DateTimeFormatter.ofPattern(format))
 
 inline fun Fragment.openTimePicker(
     hourOfDay: Int = LocalTime.now().hour,
@@ -104,20 +108,27 @@ suspend fun Fragment.textInputDialog() = suspendCoroutine<String> { cont ->
  * @return a triple of the ingredients name, amount, and serving.
  */
 suspend fun Fragment.ingredientInputDialog() =
-    suspendCoroutine<Triple<String, Double, String>> { cont ->
+    suspendCoroutine<Triple<String, Double, DisplayUnit>> { cont ->
         val layout = LayoutInflater.from(activity).inflate(R.layout.ingredient_input_dialog, null)
         val quantity = layout.findViewById<EditText>(R.id.ingredient_quantity_input)
         val spinner = layout.findViewById<AutoCompleteTextView>(R.id.exposed_dropdown)
+        val units = arrayOf<DisplayUnit>(
+            *enumValues<MassDisplayUnit>(),
+            *enumValues<VolumeDisplayUnit>(),
+            *enumValues<GeneralDisplayUnit>()
+        )
+        var selection = units.first()
         spinner.apply {
-            val units = ArrayAdapter(
+            val unitsAdapter = ArrayAdapter(
                 context,
                 android.R.layout.simple_dropdown_item_1line,
-                arrayOf("tbsp", "tsp", "gal", "cup")
+                units
             )
             exposed_dropdown.apply {
-                setAdapter(units)
+                setAdapter(unitsAdapter)
                 listSelection = 0
             }
+            setOnItemClickListener { _, _, i, _ -> selection = units[i] }
         }
         AlertDialog.Builder(requireContext())
             .setView(layout)
@@ -126,7 +137,7 @@ suspend fun Fragment.ingredientInputDialog() =
                     Triple(
                         layout.findViewById<EditText>(R.id.ingredient_name_input).text.toString(),
                         quantity.text.toString().toDoubleOrNull() ?: 0.0,
-                        spinner.editableText.toString()
+                        selection
                     )
                 )
             }

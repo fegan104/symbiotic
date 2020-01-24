@@ -9,7 +9,7 @@ import com.frankegan.symbiotic.data.Ingredient
 import com.frankegan.symbiotic.data.Note
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [
         Fermentation::class,
         Ingredient::class,
@@ -17,7 +17,7 @@ import com.frankegan.symbiotic.data.Note
         Note::class
     ]
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, DisplayUnitConverter::class)
 abstract class SymbioticDatabase : RoomDatabase() {
     abstract fun fermentationDao(): FermentationDao
     abstract fun ingredientDao(): IngredientDao
